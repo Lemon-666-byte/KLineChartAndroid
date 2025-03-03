@@ -36,11 +36,14 @@ class MainActivity : BasicActivity() {
      */
     inner class UiInfoAdapter : RecyclerView.Adapter<UiInfoViewHolder>() {
         private var uiInfoList = mutableListOf<UiInfoModel>()
+
         init {
             uiInfoList = DataUtils.generatedUiInfoList(this@MainActivity)
         }
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UiInfoViewHolder {
-            val itemView = LayoutInflater.from(parent.context).inflate(R.layout.rv_item_main, parent, false)
+            val itemView =
+                LayoutInflater.from(parent.context).inflate(R.layout.rv_item_main, parent, false)
             return UiInfoViewHolder(itemView)
         }
 

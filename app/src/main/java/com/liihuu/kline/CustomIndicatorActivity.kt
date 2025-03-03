@@ -23,8 +23,7 @@ class CustomIndicatorActivity : BasicKLineActivity(),
     KLineChartView.CustomIndicatorListener.CalcYAxisMinMax,
     KLineChartView.CustomIndicatorListener.TooltipLabels,
     KLineChartView.CustomIndicatorListener.TooltipValues,
-    KLineChartView.CustomIndicatorListener.DrawIndicator
-{
+    KLineChartView.CustomIndicatorListener.DrawIndicator {
     private val linePath = Path()
 
     private val MA5 = "MA5"
@@ -48,24 +47,31 @@ class CustomIndicatorActivity : BasicKLineActivity(),
 
     override fun generatedLayoutId(): Int = R.layout.activity_custom_indicator
 
-    override fun calcIndicator(indicatorType: String, dataList: MutableList<KLineModel>): MutableList<KLineModel> {
+    override fun calcIndicator(
+        indicatorType: String, dataList: MutableList<KLineModel>
+    ): MutableList<KLineModel> {
         return when (indicatorType) {
             MA5 -> {
                 calcMa(5)
             }
+
             MA10 -> {
                 calcMa(10)
             }
+
             MA20 -> {
                 calcMa(20)
             }
+
             else -> {
                 dataList
             }
         }
     }
 
-    override fun calcYAxisMinMax(indicatorType: String, kLineModel: KLineModel, minMaxArray: DoubleArray) {
+    override fun calcYAxisMinMax(
+        indicatorType: String, kLineModel: KLineModel, minMaxArray: DoubleArray
+    ) {
         val indicatorData = kLineModel.customIndicator
         (indicatorData as? MaModel)?.apply {
             minMaxArray[0] = min(minMaxArray[0], ma)
@@ -78,12 +84,15 @@ class CustomIndicatorActivity : BasicKLineActivity(),
             MA5 -> {
                 mutableListOf("MA5")
             }
+
             MA10 -> {
                 mutableListOf("MA10")
             }
+
             MA20 -> {
                 mutableListOf("MA20")
             }
+
             else -> {
                 mutableListOf()
             }
