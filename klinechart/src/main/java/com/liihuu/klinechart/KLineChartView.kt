@@ -27,13 +27,9 @@ import kotlin.math.max
  * @Date 2018/12/28-17:30
  */
 class KLineChartView @JvmOverloads constructor(
-    context: Context,
-    attributeSet: AttributeSet?,
-    defStyleAttr: Int = 0
+    context: Context, attributeSet: AttributeSet?, defStyleAttr: Int = 0
 ) : View(
-    context,
-    attributeSet,
-    defStyleAttr
+    context, attributeSet, defStyleAttr
 ) {
     /**
      * 自定义指标绘制监听
@@ -50,7 +46,9 @@ class KLineChartView @JvmOverloads constructor(
              * @param dataList MutableList<KLineModel>
              * @return MutableList<KLineModel>
              */
-            fun calcIndicator(indicatorType: String, dataList: MutableList<KLineModel>): MutableList<KLineModel>
+            fun calcIndicator(
+                indicatorType: String, dataList: MutableList<KLineModel>
+            ): MutableList<KLineModel>
         }
 
         /**
@@ -63,7 +61,9 @@ class KLineChartView @JvmOverloads constructor(
              * @param kLineModel Any?
              * @param minMaxArray DoubleArray
              */
-            fun calcYAxisMinMax(indicatorType: String, kLineModel: KLineModel, minMaxArray: DoubleArray)
+            fun calcYAxisMinMax(
+                indicatorType: String, kLineModel: KLineModel, minMaxArray: DoubleArray
+            )
         }
 
         /**
@@ -109,11 +109,14 @@ class KLineChartView @JvmOverloads constructor(
              * @param indicatorType String 指标类型
              */
             fun draw(
-                canvas: Canvas, paint: Paint,
+                canvas: Canvas,
+                paint: Paint,
                 indicator: Indicator,
                 startPoint: PointF,
-                yMax: Float, chartValueRate: Float,
-                dataSpace: Float, spaceRate: Float,
+                yMax: Float,
+                chartValueRate: Float,
+                dataSpace: Float,
+                spaceRate: Float,
                 drawDataList: MutableList<KLineModel>,
                 indicatorType: String
             )
@@ -134,37 +137,37 @@ class KLineChartView @JvmOverloads constructor(
      * 边框线的一些配置
      */
     lateinit var grid: Grid
-    private set
+        private set
 
     /**
      * x轴上的一些配置
      */
     lateinit var xAxis: XAxis
-    private set
+        private set
 
     /**
      * y轴上的一些配置
      */
     lateinit var yAxis: YAxis
-    private set
+        private set
 
     /**
      * 蜡烛图的一些配置
      */
     lateinit var candle: Candle
-    private set
+        private set
 
     /**
      * 指标的一些配置
      */
     lateinit var indicator: Indicator
-    private set
+        private set
 
     /**
      * 提示的一些配置
      */
     lateinit var tooltip: Tooltip
-    private set
+        private set
 
     /**
      * 图表高度尺寸类型
@@ -268,21 +271,29 @@ class KLineChartView @JvmOverloads constructor(
         this.viewPortHandler = ViewPortHandler()
         this.dataProvider = DataProvider(this.viewPortHandler)
         this.candleChart = CandleChart(
-            this.candle, this.indicator, this.xAxis, this.yAxis,
-            this.dataProvider, this.viewPortHandler
+            this.candle,
+            this.indicator,
+            this.xAxis,
+            this.yAxis,
+            this.dataProvider,
+            this.viewPortHandler
         )
         this.volChart = IndicatorChart(
-            this.indicator, this.xAxis, this.yAxis,
-            this.dataProvider, this.viewPortHandler
+            this.indicator, this.xAxis, this.yAxis, this.dataProvider, this.viewPortHandler
         )
         this.indicatorChart = IndicatorChart(
-            this.indicator, this.xAxis, this.yAxis,
-            this.dataProvider, this.viewPortHandler
+            this.indicator, this.xAxis, this.yAxis, this.dataProvider, this.viewPortHandler
         )
         this.tooltipChart = TooltipChart(
-            this.candleChart, this.volChart, this.indicatorChart,
-            this.tooltip, this.candle, this.indicator, this.yAxis,
-            this.dataProvider, this.viewPortHandler
+            this.candleChart,
+            this.volChart,
+            this.indicatorChart,
+            this.tooltip,
+            this.candle,
+            this.indicator,
+            this.yAxis,
+            this.dataProvider,
+            this.viewPortHandler
         )
 
         this.xAxisChart = XAxisChart(this.xAxis, this.dataProvider, this.viewPortHandler)
@@ -295,30 +306,39 @@ class KLineChartView @JvmOverloads constructor(
      * @param typedArray TypedArray
      */
     private fun initializeChartAttrs(typedArray: TypedArray) {
-        this.candleChart.indicatorType = typedArray.getString(R.styleable.KLineChartView_mainIndicatorType) ?: Indicator.Type.MA
+        this.candleChart.indicatorType =
+            typedArray.getString(R.styleable.KLineChartView_mainIndicatorType) ?: Indicator.Type.MA
 
-        val displayVolIndicatorChart = typedArray.getBoolean(R.styleable.KLineChartView_displayVolIndicatorChart, true)
+        val displayVolIndicatorChart =
+            typedArray.getBoolean(R.styleable.KLineChartView_displayVolIndicatorChart, true)
         if (displayVolIndicatorChart) {
             this.volChart.indicatorType = Indicator.Type.VOL
         } else {
             this.volChart.indicatorType = Indicator.Type.NO
         }
 
-        this.indicatorChart.indicatorType = typedArray.getString(R.styleable.KLineChartView_subIndicatorType) ?: Indicator.Type.MACD
+        this.indicatorChart.indicatorType =
+            typedArray.getString(R.styleable.KLineChartView_subIndicatorType) ?: Indicator.Type.MACD
 
-        this.chartHeightSizeType = typedArray.getString(R.styleable.KLineChartView_chartHeightSizeType) ?: Component.ChartHeightSizeType.FIXED
+        this.chartHeightSizeType =
+            typedArray.getString(R.styleable.KLineChartView_chartHeightSizeType)
+                ?: Component.ChartHeightSizeType.FIXED
         val volChartHeight: Float
         val indicatorChartHeight: Float
         if (this.chartHeightSizeType == Component.ChartHeightSizeType.SCALE) {
             volChartHeight = typedArray.getFloat(R.styleable.KLineChartView_volChartHeight, -1f)
-            indicatorChartHeight = typedArray.getFloat(R.styleable.KLineChartView_indicatorChartHeight, -1f)
+            indicatorChartHeight =
+                typedArray.getFloat(R.styleable.KLineChartView_indicatorChartHeight, -1f)
         } else {
             volChartHeight = typedArray.getDimension(R.styleable.KLineChartView_volChartHeight, -1f)
-            indicatorChartHeight = typedArray.getDimension(R.styleable.KLineChartView_indicatorChartHeight, -1f)
+            indicatorChartHeight =
+                typedArray.getDimension(R.styleable.KLineChartView_indicatorChartHeight, -1f)
         }
         setVolChartHeight(volChartHeight)
         setIndicatorChartHeight(indicatorChartHeight)
-        this.decelerationEnable = typedArray.getBoolean(R.styleable.KLineChartView_decelerationEnable, this.decelerationEnable)
+        this.decelerationEnable = typedArray.getBoolean(
+            R.styleable.KLineChartView_decelerationEnable, this.decelerationEnable
+        )
     }
 
     /**
@@ -327,8 +347,11 @@ class KLineChartView @JvmOverloads constructor(
      */
     private fun initializeGridAttrs(typedArray: TypedArray) {
         this.grid.apply {
-            displayGridLine = typedArray.getBoolean(R.styleable.KLineChartView_grid_displayLine, displayGridLine)
-            lineSize = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_grid_lineSize, lineSize.toInt()).toFloat()
+            displayGridLine =
+                typedArray.getBoolean(R.styleable.KLineChartView_grid_displayLine, displayGridLine)
+            lineSize = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_grid_lineSize, lineSize.toInt()
+            ).toFloat()
             lineColor = typedArray.getColor(R.styleable.KLineChartView_grid_lineColor, lineColor)
         }
     }
@@ -339,22 +362,52 @@ class KLineChartView @JvmOverloads constructor(
      */
     private fun initializeCandleAttrs(typedArray: TypedArray) {
         this.candle.apply {
-            increasingColor = typedArray.getColor(R.styleable.KLineChartView_candle_increasingColor, increasingColor)
-            decreasingColor = typedArray.getColor(R.styleable.KLineChartView_candle_decreasingColor, decreasingColor)
+            increasingColor = typedArray.getColor(
+                R.styleable.KLineChartView_candle_increasingColor, increasingColor
+            )
+            decreasingColor = typedArray.getColor(
+                R.styleable.KLineChartView_candle_decreasingColor, decreasingColor
+            )
             candleStyle = typedArray.getInt(R.styleable.KLineChartView_candle_style, candleStyle)
             chartStyle = typedArray.getInt(R.styleable.KLineChartView_candle_chartStyle, chartStyle)
-            displayHighestPriceMark = typedArray.getBoolean(R.styleable.KLineChartView_candle_displayHighestPriceMark, displayHighestPriceMark)
-            displayLowestPriceMark = typedArray.getBoolean(R.styleable.KLineChartView_candle_displayLowestPriceMark, displayLowestPriceMark)
-            lowestHighestPriceMarkTextColor = typedArray.getColor(R.styleable.KLineChartView_candle_lowestHighestPriceMarkTextColor, lowestHighestPriceMarkTextColor)
-            lowestHighestPriceMarkTextSize = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_candle_lowestHighestPriceMarkTextSize, lowestHighestPriceMarkTextSize.toInt()).toFloat()
-            displayLastPriceMark = typedArray.getBoolean(R.styleable.KLineChartView_candle_displayLastPriceMark, displayLastPriceMark)
-            lastPriceMarkLineStyle = typedArray.getInt(R.styleable.KLineChartView_candle_lastPriceMarkLineStyle, lastPriceMarkLineStyle)
-            lastPriceMarkLineSize = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_candle_lastPriceMarkLineSize, lastPriceMarkLineSize.toInt()).toFloat()
-            lastPriceMarkLineColor = typedArray.getColor(R.styleable.KLineChartView_candle_lastPriceMarkLineColor, lastPriceMarkLineColor)
-            timeLineSize = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_candle_timeLineSize, timeLineSize.toInt()).toFloat()
-            timeLineColor = typedArray.getColor(R.styleable.KLineChartView_candle_timeLineColor, timeLineColor)
-            timeLineFillColor = typedArray.getColor(R.styleable.KLineChartView_candle_timeLineFillColor, timeLineFillColor)
-            timeAverageLineColor = typedArray.getColor(R.styleable.KLineChartView_candle_timeAverageLineColor, timeAverageLineColor)
+            displayHighestPriceMark = typedArray.getBoolean(
+                R.styleable.KLineChartView_candle_displayHighestPriceMark, displayHighestPriceMark
+            )
+            displayLowestPriceMark = typedArray.getBoolean(
+                R.styleable.KLineChartView_candle_displayLowestPriceMark, displayLowestPriceMark
+            )
+            lowestHighestPriceMarkTextColor = typedArray.getColor(
+                R.styleable.KLineChartView_candle_lowestHighestPriceMarkTextColor,
+                lowestHighestPriceMarkTextColor
+            )
+            lowestHighestPriceMarkTextSize = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_candle_lowestHighestPriceMarkTextSize,
+                lowestHighestPriceMarkTextSize.toInt()
+            ).toFloat()
+            displayLastPriceMark = typedArray.getBoolean(
+                R.styleable.KLineChartView_candle_displayLastPriceMark, displayLastPriceMark
+            )
+            lastPriceMarkLineStyle = typedArray.getInt(
+                R.styleable.KLineChartView_candle_lastPriceMarkLineStyle, lastPriceMarkLineStyle
+            )
+            lastPriceMarkLineSize = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_candle_lastPriceMarkLineSize,
+                lastPriceMarkLineSize.toInt()
+            ).toFloat()
+            lastPriceMarkLineColor = typedArray.getColor(
+                R.styleable.KLineChartView_candle_lastPriceMarkLineColor, lastPriceMarkLineColor
+            )
+            timeLineSize = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_candle_timeLineSize, timeLineSize.toInt()
+            ).toFloat()
+            timeLineColor =
+                typedArray.getColor(R.styleable.KLineChartView_candle_timeLineColor, timeLineColor)
+            timeLineFillColor = typedArray.getColor(
+                R.styleable.KLineChartView_candle_timeLineFillColor, timeLineFillColor
+            )
+            timeAverageLineColor = typedArray.getColor(
+                R.styleable.KLineChartView_candle_timeAverageLineColor, timeAverageLineColor
+            )
         }
     }
 
@@ -364,9 +417,15 @@ class KLineChartView @JvmOverloads constructor(
      */
     private fun initializeIndicatorAttrs(typedArray: TypedArray) {
         this.indicator.apply {
-            lineSize = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_indicator_lineSize, lineSize.toInt()).toFloat()
-            increasingColor = typedArray.getColor(R.styleable.KLineChartView_indicator_increasingColor, increasingColor)
-            decreasingColor = typedArray.getColor(R.styleable.KLineChartView_indicator_decreasingColor, decreasingColor)
+            lineSize = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_indicator_lineSize, lineSize.toInt()
+            ).toFloat()
+            increasingColor = typedArray.getColor(
+                R.styleable.KLineChartView_indicator_increasingColor, increasingColor
+            )
+            decreasingColor = typedArray.getColor(
+                R.styleable.KLineChartView_indicator_decreasingColor, decreasingColor
+            )
         }
     }
 
@@ -376,24 +435,67 @@ class KLineChartView @JvmOverloads constructor(
      */
     private fun initializeTooltipAttrs(typedArray: TypedArray) {
         this.tooltip.apply {
-            crossLineStyle = typedArray.getInt(R.styleable.KLineChartView_tooltip_crossLineStyle, crossLineStyle)
-            crossLineSize = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_tooltip_crossLineSize, crossLineSize.toInt()).toFloat()
-            crossLineColor = typedArray.getColor(R.styleable.KLineChartView_tooltip_crossLineColor, crossLineColor)
-            crossTextRectStrokeLineSize = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_tooltip_crossTextRectStrokeLineSize, crossTextRectStrokeLineSize.toInt()).toFloat()
-            crossTextRectStrokeLineColor = typedArray.getColor(R.styleable.KLineChartView_tooltip_crossTextRectStrokeLineColor, crossTextRectStrokeLineColor)
-            crossTextRectFillColor = typedArray.getColor(R.styleable.KLineChartView_tooltip_crossTextRectFillColor, crossTextRectFillColor)
-            crossTextColor = typedArray.getColor(R.styleable.KLineChartView_tooltip_crossTextColor, crossTextColor)
-            crossTextSize = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_tooltip_crossTextSize, crossTextSize.toInt()).toFloat()
-            crossTextMarginSpace = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_tooltip_crossTextMarginSpace, crossTextMarginSpace.toInt()).toFloat()
-            generalDataRectStrokeLineSize = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_tooltip_generalDataRectStrokeLineSize, generalDataRectStrokeLineSize.toInt()).toFloat()
-            generalDataRectStrokeLineColor = typedArray.getColor(R.styleable.KLineChartView_tooltip_generalDataRectStrokeLineColor, generalDataRectStrokeLineColor)
-            generalDataRectFillColor = typedArray.getColor(R.styleable.KLineChartView_tooltip_generalDataRectFillColor, generalDataRectFillColor)
-            generalDataTextSize = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_tooltip_generalDataTextSize, generalDataTextSize.toInt()).toFloat()
-            generalDataTextColor = typedArray.getColor(R.styleable.KLineChartView_tooltip_generalDataTextColor, generalDataTextColor)
-            generalDataIncreasingColor = typedArray.getColor(R.styleable.KLineChartView_tooltip_generalDataIncreasingColor, generalDataIncreasingColor)
-            generalDataDecreasingColor = typedArray.getColor(R.styleable.KLineChartView_tooltip_generalDataDecreasingColor, generalDataDecreasingColor)
-            indicatorDisplayRule = typedArray.getInt(R.styleable.KLineChartView_tooltip_indicatorDisplayRule, indicatorDisplayRule)
-            indicatorTextSize = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_tooltip_indicatorTextSize, indicatorTextSize.toInt()).toFloat()
+            crossLineStyle =
+                typedArray.getInt(R.styleable.KLineChartView_tooltip_crossLineStyle, crossLineStyle)
+            crossLineSize = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_tooltip_crossLineSize, crossLineSize.toInt()
+            ).toFloat()
+            crossLineColor = typedArray.getColor(
+                R.styleable.KLineChartView_tooltip_crossLineColor, crossLineColor
+            )
+            crossTextRectStrokeLineSize = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_tooltip_crossTextRectStrokeLineSize,
+                crossTextRectStrokeLineSize.toInt()
+            ).toFloat()
+            crossTextRectStrokeLineColor = typedArray.getColor(
+                R.styleable.KLineChartView_tooltip_crossTextRectStrokeLineColor,
+                crossTextRectStrokeLineColor
+            )
+            crossTextRectFillColor = typedArray.getColor(
+                R.styleable.KLineChartView_tooltip_crossTextRectFillColor, crossTextRectFillColor
+            )
+            crossTextColor = typedArray.getColor(
+                R.styleable.KLineChartView_tooltip_crossTextColor, crossTextColor
+            )
+            crossTextSize = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_tooltip_crossTextSize, crossTextSize.toInt()
+            ).toFloat()
+            crossTextMarginSpace = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_tooltip_crossTextMarginSpace,
+                crossTextMarginSpace.toInt()
+            ).toFloat()
+            generalDataRectStrokeLineSize = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_tooltip_generalDataRectStrokeLineSize,
+                generalDataRectStrokeLineSize.toInt()
+            ).toFloat()
+            generalDataRectStrokeLineColor = typedArray.getColor(
+                R.styleable.KLineChartView_tooltip_generalDataRectStrokeLineColor,
+                generalDataRectStrokeLineColor
+            )
+            generalDataRectFillColor = typedArray.getColor(
+                R.styleable.KLineChartView_tooltip_generalDataRectFillColor,
+                generalDataRectFillColor
+            )
+            generalDataTextSize = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_tooltip_generalDataTextSize, generalDataTextSize.toInt()
+            ).toFloat()
+            generalDataTextColor = typedArray.getColor(
+                R.styleable.KLineChartView_tooltip_generalDataTextColor, generalDataTextColor
+            )
+            generalDataIncreasingColor = typedArray.getColor(
+                R.styleable.KLineChartView_tooltip_generalDataIncreasingColor,
+                generalDataIncreasingColor
+            )
+            generalDataDecreasingColor = typedArray.getColor(
+                R.styleable.KLineChartView_tooltip_generalDataDecreasingColor,
+                generalDataDecreasingColor
+            )
+            indicatorDisplayRule = typedArray.getInt(
+                R.styleable.KLineChartView_tooltip_indicatorDisplayRule, indicatorDisplayRule
+            )
+            indicatorTextSize = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_tooltip_indicatorTextSize, indicatorTextSize.toInt()
+            ).toFloat()
         }
     }
 
@@ -403,21 +505,48 @@ class KLineChartView @JvmOverloads constructor(
      */
     private fun initializeXAxisAttrs(typedArray: TypedArray) {
         this.xAxis.apply {
-            displayAxisLine = typedArray.getBoolean(R.styleable.KLineChartView_xaxis_displayAxisLine, displayAxisLine)
-            axisLineColor = typedArray.getColor(R.styleable.KLineChartView_xaxis_axisLineColor, axisLineColor)
-            axisLineSize = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_xaxis_axisLineSize, axisLineSize.toInt()).toFloat()
-            displayTickText = typedArray.getBoolean(R.styleable.KLineChartView_xaxis_displayTickText, displayTickText)
-            tickTextColor = typedArray.getColor(R.styleable.KLineChartView_xaxis_tickTextColor, tickTextColor)
-            tickTextSize = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_xaxis_tickTextSize, tickTextSize.toInt()).toFloat()
-            displayTickLine = typedArray.getBoolean(R.styleable.KLineChartView_xaxis_displayTickLine, true)
-            tickLineSize = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_xaxis_tickLineSize, tickLineSize.toInt()).toFloat()
-            displaySeparatorLine = typedArray.getBoolean(R.styleable.KLineChartView_xaxis_displaySeparatorLine, displaySeparatorLine)
-            separatorLineSize = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_xaxis_separatorLineSize, separatorLineSize.toInt()).toFloat()
-            separatorLineColor = typedArray.getColor(R.styleable.KLineChartView_xaxis_separatorLineColor, separatorLineColor)
-            separatorLineStyle = typedArray.getInt(R.styleable.KLineChartView_xaxis_separatorLineStyle, separatorLineStyle)
-            textMarginSpace = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_xaxis_textMarginSpace, textMarginSpace.toInt()).toFloat()
-            xAxisMaxHeight = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_xaxis_axisMaxHeight, xAxisMaxHeight.toInt()).toFloat()
-            xAxisMinHeight = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_xaxis_axisMinHeight, xAxisMinHeight.toInt()).toFloat()
+            displayAxisLine = typedArray.getBoolean(
+                R.styleable.KLineChartView_xaxis_displayAxisLine, displayAxisLine
+            )
+            axisLineColor =
+                typedArray.getColor(R.styleable.KLineChartView_xaxis_axisLineColor, axisLineColor)
+            axisLineSize = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_xaxis_axisLineSize, axisLineSize.toInt()
+            ).toFloat()
+            displayTickText = typedArray.getBoolean(
+                R.styleable.KLineChartView_xaxis_displayTickText, displayTickText
+            )
+            tickTextColor =
+                typedArray.getColor(R.styleable.KLineChartView_xaxis_tickTextColor, tickTextColor)
+            tickTextSize = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_xaxis_tickTextSize, tickTextSize.toInt()
+            ).toFloat()
+            displayTickLine =
+                typedArray.getBoolean(R.styleable.KLineChartView_xaxis_displayTickLine, true)
+            tickLineSize = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_xaxis_tickLineSize, tickLineSize.toInt()
+            ).toFloat()
+            displaySeparatorLine = typedArray.getBoolean(
+                R.styleable.KLineChartView_xaxis_displaySeparatorLine, displaySeparatorLine
+            )
+            separatorLineSize = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_xaxis_separatorLineSize, separatorLineSize.toInt()
+            ).toFloat()
+            separatorLineColor = typedArray.getColor(
+                R.styleable.KLineChartView_xaxis_separatorLineColor, separatorLineColor
+            )
+            separatorLineStyle = typedArray.getInt(
+                R.styleable.KLineChartView_xaxis_separatorLineStyle, separatorLineStyle
+            )
+            textMarginSpace = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_xaxis_textMarginSpace, textMarginSpace.toInt()
+            ).toFloat()
+            xAxisMaxHeight = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_xaxis_axisMaxHeight, xAxisMaxHeight.toInt()
+            ).toFloat()
+            xAxisMinHeight = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_xaxis_axisMinHeight, xAxisMinHeight.toInt()
+            ).toFloat()
         }
     }
 
@@ -427,23 +556,51 @@ class KLineChartView @JvmOverloads constructor(
      */
     private fun initializeYAxisAttrs(typedArray: TypedArray) {
         this.yAxis.apply {
-            displayAxisLine = typedArray.getBoolean(R.styleable.KLineChartView_yaxis_displayAxisLine, false)
-            axisLineColor = typedArray.getColor(R.styleable.KLineChartView_yaxis_axisLineColor, axisLineColor)
-            axisLineSize = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_yaxis_axisLineSize, axisLineSize.toInt()).toFloat()
-            displayTickText = typedArray.getBoolean(R.styleable.KLineChartView_yaxis_displayTickText, displayTickText)
-            tickTextColor = typedArray.getColor(R.styleable.KLineChartView_yaxis_tickTextColor, tickTextColor)
-            tickTextSize = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_yaxis_tickTextSize, tickTextSize.toInt()).toFloat()
-            displayTickLine = typedArray.getBoolean(R.styleable.KLineChartView_yaxis_displayTickLine, false)
-            tickLineSize = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_yaxis_tickLineSize, tickLineSize.toInt()).toFloat()
-            displaySeparatorLine = typedArray.getBoolean(R.styleable.KLineChartView_yaxis_displaySeparatorLine, displaySeparatorLine)
-            separatorLineSize = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_yaxis_separatorLineSize, separatorLineSize.toInt()).toFloat()
-            separatorLineColor = typedArray.getColor(R.styleable.KLineChartView_yaxis_separatorLineColor, separatorLineColor)
-            separatorLineStyle = typedArray.getInt(R.styleable.KLineChartView_yaxis_separatorLineStyle, separatorLineStyle)
-            textMarginSpace = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_yaxis_textMarginSpace, textMarginSpace.toInt()).toFloat()
-            yAxisTextPosition = typedArray.getInt(R.styleable.KLineChartView_yaxis_textPosition, yAxisTextPosition)
-            yAxisPosition = typedArray.getInt(R.styleable.KLineChartView_yaxis_axisPosition, yAxisPosition)
-            yAxisMaxWidth = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_yaxis_axisMaxWidth, yAxisMaxWidth.toInt()).toFloat()
-            yAxisMinWidth = typedArray.getDimensionPixelSize(R.styleable.KLineChartView_yaxis_axisMinWidth, yAxisMinWidth.toInt()).toFloat()
+            displayAxisLine =
+                typedArray.getBoolean(R.styleable.KLineChartView_yaxis_displayAxisLine, false)
+            axisLineColor =
+                typedArray.getColor(R.styleable.KLineChartView_yaxis_axisLineColor, axisLineColor)
+            axisLineSize = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_yaxis_axisLineSize, axisLineSize.toInt()
+            ).toFloat()
+            displayTickText = typedArray.getBoolean(
+                R.styleable.KLineChartView_yaxis_displayTickText, displayTickText
+            )
+            tickTextColor =
+                typedArray.getColor(R.styleable.KLineChartView_yaxis_tickTextColor, tickTextColor)
+            tickTextSize = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_yaxis_tickTextSize, tickTextSize.toInt()
+            ).toFloat()
+            displayTickLine =
+                typedArray.getBoolean(R.styleable.KLineChartView_yaxis_displayTickLine, false)
+            tickLineSize = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_yaxis_tickLineSize, tickLineSize.toInt()
+            ).toFloat()
+            displaySeparatorLine = typedArray.getBoolean(
+                R.styleable.KLineChartView_yaxis_displaySeparatorLine, displaySeparatorLine
+            )
+            separatorLineSize = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_yaxis_separatorLineSize, separatorLineSize.toInt()
+            ).toFloat()
+            separatorLineColor = typedArray.getColor(
+                R.styleable.KLineChartView_yaxis_separatorLineColor, separatorLineColor
+            )
+            separatorLineStyle = typedArray.getInt(
+                R.styleable.KLineChartView_yaxis_separatorLineStyle, separatorLineStyle
+            )
+            textMarginSpace = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_yaxis_textMarginSpace, textMarginSpace.toInt()
+            ).toFloat()
+            yAxisTextPosition =
+                typedArray.getInt(R.styleable.KLineChartView_yaxis_textPosition, yAxisTextPosition)
+            yAxisPosition =
+                typedArray.getInt(R.styleable.KLineChartView_yaxis_axisPosition, yAxisPosition)
+            yAxisMaxWidth = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_yaxis_axisMaxWidth, yAxisMaxWidth.toInt()
+            ).toFloat()
+            yAxisMinWidth = typedArray.getDimensionPixelSize(
+                R.styleable.KLineChartView_yaxis_axisMinWidth, yAxisMinWidth.toInt()
+            ).toFloat()
 
         }
     }
@@ -477,28 +634,34 @@ class KLineChartView @JvmOverloads constructor(
                     volChartHeight = totalChartHeight * this.volChart.chartHeightScale
                     indicatorChartHeight = totalChartHeight * this.indicatorChart.chartHeightScale
                 }
-                volChartHeight = fixChartHeight(totalChartHeight, volChartHeight, defaultChartHeight)
-                indicatorChartHeight = fixChartHeight(totalChartHeight, indicatorChartHeight, defaultChartHeight)
+                volChartHeight =
+                    fixChartHeight(totalChartHeight, volChartHeight, defaultChartHeight)
+                indicatorChartHeight =
+                    fixChartHeight(totalChartHeight, indicatorChartHeight, defaultChartHeight)
 
                 if (totalChartHeight < volChartHeight + indicatorChartHeight) {
                     volChartHeight = defaultChartHeight
                     indicatorChartHeight = defaultChartHeight
                 }
             }
+
             isDisplayVolChart && !isDisplayIndicatorChart -> {
                 val defaultChartHeight = totalChartHeight * 0.3f
                 if (this.chartHeightSizeType == Component.ChartHeightSizeType.SCALE) {
                     volChartHeight = totalChartHeight * this.volChart.chartHeightScale
                 }
-                volChartHeight = fixChartHeight(totalChartHeight, volChartHeight, defaultChartHeight)
+                volChartHeight =
+                    fixChartHeight(totalChartHeight, volChartHeight, defaultChartHeight)
                 indicatorChartHeight = -1f
             }
+
             !isDisplayVolChart && isDisplayIndicatorChart -> {
                 val defaultChartHeight = totalChartHeight * 0.3f
                 if (this.chartHeightSizeType == Component.ChartHeightSizeType.SCALE) {
                     indicatorChartHeight = totalChartHeight * this.indicatorChart.chartHeightScale
                 }
-                indicatorChartHeight = fixChartHeight(totalChartHeight, indicatorChartHeight, defaultChartHeight)
+                indicatorChartHeight =
+                    fixChartHeight(totalChartHeight, indicatorChartHeight, defaultChartHeight)
                 volChartHeight = -1f
             }
         }
@@ -523,7 +686,9 @@ class KLineChartView @JvmOverloads constructor(
      * @param defaultHeight Float
      * @return Float
      */
-    private fun fixChartHeight(totalChartHeight: Float, chartHeight: Float, defaultHeight: Float): Float {
+    private fun fixChartHeight(
+        totalChartHeight: Float, chartHeight: Float, defaultHeight: Float
+    ): Float {
         if (chartHeight < 0 || totalChartHeight < chartHeight) {
             return defaultHeight
         }
@@ -573,9 +738,7 @@ class KLineChartView @JvmOverloads constructor(
         offsetBottom += requireXAxisHeight
 
         this.viewPortHandler.setDimens(
-            offsetLeft, offsetTop,
-            measuredWidth - offsetRight,
-            measuredHeight - offsetBottom
+            offsetLeft, offsetTop, measuredWidth - offsetRight, measuredHeight - offsetBottom
         )
     }
 
@@ -593,91 +756,111 @@ class KLineChartView @JvmOverloads constructor(
                     this@KLineChartView.dataProvider.dataList =
                         CalcIndicatorUtils.calcMa(this@KLineChartView.dataProvider.dataList)
                 }
+
                 Indicator.Type.MACD -> {
                     this@KLineChartView.dataProvider.dataList =
                         CalcIndicatorUtils.calcMacd(this@KLineChartView.dataProvider.dataList)
                 }
+
                 Indicator.Type.VOL -> {
                     this@KLineChartView.dataProvider.dataList =
                         CalcIndicatorUtils.calcVol(this@KLineChartView.dataProvider.dataList)
                 }
+
                 Indicator.Type.BOLL -> {
                     this@KLineChartView.dataProvider.dataList =
                         CalcIndicatorUtils.calcBoll(this@KLineChartView.dataProvider.dataList)
                 }
+
                 Indicator.Type.BIAS -> {
                     this@KLineChartView.dataProvider.dataList =
                         CalcIndicatorUtils.calcBias(this@KLineChartView.dataProvider.dataList)
                 }
+
                 Indicator.Type.BRAR -> {
                     this@KLineChartView.dataProvider.dataList =
                         CalcIndicatorUtils.calcBrar(this@KLineChartView.dataProvider.dataList)
                 }
+
                 Indicator.Type.CCI -> {
                     this@KLineChartView.dataProvider.dataList =
                         CalcIndicatorUtils.calcCci(this@KLineChartView.dataProvider.dataList)
                 }
+
                 Indicator.Type.CR -> {
                     this@KLineChartView.dataProvider.dataList =
                         CalcIndicatorUtils.calcCr(this@KLineChartView.dataProvider.dataList)
                 }
+
                 Indicator.Type.DMA -> {
                     this@KLineChartView.dataProvider.dataList =
                         CalcIndicatorUtils.calcDma(this@KLineChartView.dataProvider.dataList)
                 }
+
                 Indicator.Type.DMI -> {
                     this@KLineChartView.dataProvider.dataList =
                         CalcIndicatorUtils.calcDmi(this@KLineChartView.dataProvider.dataList)
                 }
+
                 Indicator.Type.KDJ -> {
                     this@KLineChartView.dataProvider.dataList =
                         CalcIndicatorUtils.calcKdj(this@KLineChartView.dataProvider.dataList)
                 }
+
                 Indicator.Type.KD -> {
                     this@KLineChartView.dataProvider.dataList =
                         CalcIndicatorUtils.calcKdj(this@KLineChartView.dataProvider.dataList)
                 }
+
                 Indicator.Type.RSI -> {
                     this@KLineChartView.dataProvider.dataList =
                         CalcIndicatorUtils.calcRsi(this@KLineChartView.dataProvider.dataList)
                 }
+
                 Indicator.Type.PSY -> {
                     this@KLineChartView.dataProvider.dataList =
                         CalcIndicatorUtils.calcPsy(this@KLineChartView.dataProvider.dataList)
                 }
+
                 Indicator.Type.TRIX -> {
                     this@KLineChartView.dataProvider.dataList =
                         CalcIndicatorUtils.calcTrix(this@KLineChartView.dataProvider.dataList)
                 }
+
                 Indicator.Type.OBV -> {
                     this@KLineChartView.dataProvider.dataList =
                         CalcIndicatorUtils.calcObv(this@KLineChartView.dataProvider.dataList)
                 }
+
                 Indicator.Type.VR -> {
                     this@KLineChartView.dataProvider.dataList =
                         CalcIndicatorUtils.calcVr(this@KLineChartView.dataProvider.dataList)
                 }
+
                 Indicator.Type.WR -> {
                     this@KLineChartView.dataProvider.dataList =
                         CalcIndicatorUtils.calcWr(this@KLineChartView.dataProvider.dataList)
                 }
+
                 Indicator.Type.MTM -> {
                     this@KLineChartView.dataProvider.dataList =
                         CalcIndicatorUtils.calcMtm(this@KLineChartView.dataProvider.dataList)
                 }
+
                 Indicator.Type.EMV -> {
                     this@KLineChartView.dataProvider.dataList =
                         CalcIndicatorUtils.calcEmv(this@KLineChartView.dataProvider.dataList)
                 }
+
                 Indicator.Type.SAR -> {
                     this@KLineChartView.dataProvider.dataList =
                         CalcIndicatorUtils.calcSar(this@KLineChartView.dataProvider.dataList)
                 }
+
                 else -> {
                     this@KLineChartView.dataProvider.dataList =
                         this@KLineChartView.calcIndicator?.calcIndicator(
-                            indicatorType,
-                            this@KLineChartView.dataProvider.dataList
+                            indicatorType, this@KLineChartView.dataProvider.dataList
                         ) ?: this@KLineChartView.dataProvider.dataList
                 }
             }
@@ -772,7 +955,8 @@ class KLineChartView @JvmOverloads constructor(
      */
     fun setSubIndicatorType(indicatorType: String) {
         if (this.indicatorChart.indicatorType != indicatorType) {
-            val shouldCalcChartHeight = indicatorType == Indicator.Type.NO || this.indicatorChart.indicatorType == Indicator.Type.NO
+            val shouldCalcChartHeight =
+                indicatorType == Indicator.Type.NO || this.indicatorChart.indicatorType == Indicator.Type.NO
             this.indicatorChart.indicatorType = indicatorType
             if (shouldCalcChartHeight) {
                 calcChartHeight()
