@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import com.liihuu.kline.utils.DataUtils
-import com.liihuu.klinechart.KLineChartView
+import com.app.klinechart.KLineChartView
 import kotlinx.android.synthetic.main.activity_segment_load_data_with_anim.*
 import kotlinx.android.synthetic.main.kline_layout.*
 

@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import com.liihuu.kline.model.UiInfoModel
-import com.liihuu.klinechart.model.KLineModel
+import com.app.klinechart.model.KLineModel
 import kotlin.math.roundToInt
 
 /**

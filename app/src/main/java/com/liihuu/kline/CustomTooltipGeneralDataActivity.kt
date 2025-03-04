@@ -5,8 +5,8 @@ import android.graphics.Paint
 import android.os.Bundle
 import com.liihuu.kline.utils.formatDate
 import com.liihuu.kline.utils.formatDecimal
-import com.liihuu.klinechart.component.Tooltip
-import com.liihuu.klinechart.model.KLineModel
+import com.app.klinechart.component.Tooltip
+import com.app.klinechart.model.KLineModel
 import kotlinx.android.synthetic.main.kline_layout.*
 
 /**

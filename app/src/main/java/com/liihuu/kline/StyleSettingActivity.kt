@@ -4,7 +4,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
-import com.liihuu.klinechart.component.Indicator
+import com.app.klinechart.component.Indicator
 import kotlinx.android.synthetic.main.kline_layout.*
 
 /**

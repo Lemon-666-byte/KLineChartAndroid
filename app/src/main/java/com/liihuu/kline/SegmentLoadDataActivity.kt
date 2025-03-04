@@ -3,7 +3,7 @@ package com.liihuu.kline
 import android.os.Bundle
 import android.os.Handler
 import com.liihuu.kline.utils.DataUtils
-import com.liihuu.klinechart.KLineChartView
+import com.app.klinechart.KLineChartView
 import kotlinx.android.synthetic.main.kline_layout.*
 
 

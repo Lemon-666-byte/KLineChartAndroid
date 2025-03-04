@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.liihuu.klinechart.component.Indicator
+import com.app.klinechart.component.Indicator
 import kotlinx.android.synthetic.main.activity_indicator_setting.*
 import kotlinx.android.synthetic.main.kline_layout.*
 

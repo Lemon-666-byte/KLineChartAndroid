@@ -6,8 +6,8 @@ import com.liihuu.kline.utils.DimensionUtils
 import com.liihuu.kline.utils.MeasureUtils
 import com.liihuu.kline.utils.formatDate
 import com.liihuu.kline.utils.formatDecimal
-import com.liihuu.klinechart.component.Tooltip
-import com.liihuu.klinechart.model.KLineModel
+import com.app.klinechart.component.Tooltip
+import com.app.klinechart.model.KLineModel
 import kotlinx.android.synthetic.main.kline_layout.*
 import kotlin.math.max
 

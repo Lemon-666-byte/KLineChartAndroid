@@ -1,6 +1,11 @@
 package com.liihuu.kline
 
 import android.os.Bundle
+import com.app.klinechart.component.Candle
+import com.app.klinechart.component.Indicator
+import com.app.klinechart.component.Tooltip
+import com.app.klinechart.component.XAxis
+import com.app.klinechart.component.YAxis
 import com.liihuu.kline.utils.formatDate
 import com.liihuu.kline.utils.formatDecimal
 import com.liihuu.klinechart.component.*

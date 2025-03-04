@@ -6,9 +6,9 @@ import android.graphics.Path
 import android.graphics.PointF
 import android.os.Bundle
 import com.liihuu.kline.model.MaModel
-import com.liihuu.klinechart.KLineChartView
-import com.liihuu.klinechart.component.Indicator
-import com.liihuu.klinechart.model.KLineModel
+import com.app.klinechart.KLineChartView
+import com.app.klinechart.component.Indicator
+import com.app.klinechart.model.KLineModel
 import kotlinx.android.synthetic.main.activity_custom_indicator.*
 import kotlinx.android.synthetic.main.kline_layout.*
 import kotlin.math.max
