@@ -22,6 +22,24 @@ internal class DataProvider(private val viewPortHandler: ViewPortHandler) {
         var DATA_SPACE = 20
     }
 
+
+    /**
+     * 可见的数据的最大个数
+     */
+    var maxVisibleDataCount = 120
+
+    /**
+     * 可见数据的最小个数
+     */
+    var minVisibleDataCount = 30
+
+
+    /**
+     * 可见数据的个数
+     */
+    var visibleDataCount = 60
+
+
     /**
      * 数据集合
      */
@@ -32,25 +50,12 @@ internal class DataProvider(private val viewPortHandler: ViewPortHandler) {
      */
     var visibleDataMinPos = 0
 
-    /**
-     * 可见数据的个数
-     */
-    var visibleDataCount = 120
 
     /**
      * 每条数据绘制所占的空间
      */
     var dataSpace = 0f
 
-    /**
-     * 可见的数据的最大个数
-     */
-    var maxVisibleDataCount = 180
-
-    /**
-     * 可见数据的最小个数
-     */
-    var minVisibleDataCount = 30
 
     /**
      * 光标中心点位置坐标
