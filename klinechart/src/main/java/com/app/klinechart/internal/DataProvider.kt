@@ -19,7 +19,7 @@ internal class DataProvider(private val viewPortHandler: ViewPortHandler) {
         /**
          * 拖动 偏移量
          */
-        var DATA_ADD_SPACE = 20
+        var DATA_SPACE = 20
     }
 
     /**
@@ -104,8 +104,8 @@ internal class DataProvider(private val viewPortHandler: ViewPortHandler) {
      * 移动到最后一条数据
      */
     private fun moveToLast() {
-        this.visibleDataMinPos = if (this.dataList.size + DATA_ADD_SPACE > this.visibleDataCount) {
-            this.dataList.size + DATA_ADD_SPACE - this.visibleDataCount
+        this.visibleDataMinPos = if (this.dataList.size + DATA_SPACE > this.visibleDataCount) {
+            this.dataList.size + DATA_SPACE - this.visibleDataCount
         } else {
             0
         }
@@ -164,7 +164,7 @@ internal class DataProvider(private val viewPortHandler: ViewPortHandler) {
             min(max(this.visibleDataCount, this.minVisibleDataCount), this.maxVisibleDataCount)
         val minPos = touchStartMinPos + touchRange - this.visibleDataCount
         when {
-            minPos + this.visibleDataCount > this.dataList.size + DATA_ADD_SPACE -> this.visibleDataMinPos =
+            minPos + this.visibleDataCount > this.dataList.size + DATA_SPACE -> this.visibleDataMinPos =
                 0
 
             minPos < 0 -> this.visibleDataMinPos = 0
@@ -187,7 +187,7 @@ internal class DataProvider(private val viewPortHandler: ViewPortHandler) {
         noMore: Boolean,
         loadMoreListener: KLineChartView.LoadMoreListener?
     ): Boolean {
-        val dataSize = this.dataList.size + DATA_ADD_SPACE
+        val dataSize = this.dataList.size + DATA_SPACE
         when {
             moveDist < 0 - this.dataSpace / 2 -> {
 
