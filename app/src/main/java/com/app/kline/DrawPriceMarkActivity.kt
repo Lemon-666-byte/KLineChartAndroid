@@ -1,8 +1,8 @@
-package com.liihuu.kline
+package com.app.kline
 
 import android.graphics.*
 import android.os.Bundle
-import com.liihuu.kline.utils.DimensionUtils
+import com.app.kline.utils.DimensionUtils
 import com.app.klinechart.component.Candle
 import kotlinx.android.synthetic.main.kline_layout.*
 

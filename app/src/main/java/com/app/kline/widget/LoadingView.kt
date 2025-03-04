@@ -1,4 +1,4 @@
-package com.liihuu.kline.widget
+package com.app.kline.widget
 
 import android.content.Context
 import android.graphics.Canvas
@@ -11,7 +11,7 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.Transformation
-import com.liihuu.kline.utils.DimensionUtils
+import com.app.kline.utils.DimensionUtils
 
 /**
  * @Author lihu hu_li888@foxmail.com

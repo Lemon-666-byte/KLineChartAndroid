@@ -1,13 +1,14 @@
-package com.liihuu.kline
+package com.app.kline
 
 import android.graphics.*
 import android.os.Bundle
-import com.liihuu.kline.utils.DimensionUtils
-import com.liihuu.kline.utils.MeasureUtils
-import com.liihuu.kline.utils.formatDate
-import com.liihuu.kline.utils.formatDecimal
+import com.app.kline.utils.DimensionUtils
+import com.app.kline.utils.MeasureUtils
+import com.app.kline.utils.formatDate
+import com.app.kline.utils.formatDecimal
 import com.app.klinechart.component.Tooltip
 import com.app.klinechart.model.KLineModel
+import com.liihuu.kline.R
 import kotlinx.android.synthetic.main.kline_layout.*
 import kotlin.math.max
 

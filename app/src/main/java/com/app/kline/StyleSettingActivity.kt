@@ -1,10 +1,11 @@
-package com.liihuu.kline
+package com.app.kline
 
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import com.app.klinechart.component.Indicator
+import com.liihuu.kline.R
 import kotlinx.android.synthetic.main.kline_layout.*
 
 /**
@@ -37,7 +38,9 @@ class StyleSettingActivity : BasicKLineActivity(){
             }
 
             R.id.candle_style -> {
-                val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resources.getStringArray(R.array.candle_style))
+                val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resources.getStringArray(
+                    R.array.candle_style
+                ))
                 AlertDialog.Builder(this)
                     .setTitle(R.string.candle_style)
                     .setAdapter(arrayAdapter) {
@@ -49,7 +52,9 @@ class StyleSettingActivity : BasicKLineActivity(){
             }
 
             R.id.main_chart_type -> {
-                val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resources.getStringArray(R.array.main_chart_style))
+                val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resources.getStringArray(
+                    R.array.main_chart_style
+                ))
                 AlertDialog.Builder(this)
                     .setTitle(R.string.main_chart_type)
                     .setAdapter(arrayAdapter) {
@@ -76,7 +81,9 @@ class StyleSettingActivity : BasicKLineActivity(){
             }
 
             R.id.mark_last_price_style -> {
-                val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resources.getStringArray(R.array.line_style))
+                val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resources.getStringArray(
+                    R.array.line_style
+                ))
                 AlertDialog.Builder(this)
                     .setTitle(R.string.mark_last_price_style)
                     .setAdapter(arrayAdapter) {
@@ -88,7 +95,9 @@ class StyleSettingActivity : BasicKLineActivity(){
             }
 
             R.id.cross_line_style -> {
-                val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resources.getStringArray(R.array.line_style))
+                val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resources.getStringArray(
+                    R.array.line_style
+                ))
                 AlertDialog.Builder(this)
                     .setTitle(R.string.cross_line_style)
                     .setAdapter(arrayAdapter) {
@@ -100,7 +109,9 @@ class StyleSettingActivity : BasicKLineActivity(){
             }
 
             R.id.index_tooltip_text_display_rule -> {
-                val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resources.getStringArray(R.array.index_tooltip_display_rule))
+                val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resources.getStringArray(
+                    R.array.index_tooltip_display_rule
+                ))
                 AlertDialog.Builder(this)
                     .setTitle(R.string.index_tooltip_text_display_rule)
                     .setAdapter(arrayAdapter) {
@@ -132,7 +143,9 @@ class StyleSettingActivity : BasicKLineActivity(){
             }
 
             R.id.x_axis_separator_line_style -> {
-                val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resources.getStringArray(R.array.line_style))
+                val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resources.getStringArray(
+                    R.array.line_style
+                ))
                 AlertDialog.Builder(this)
                     .setTitle(R.string.x_axis_separator_line_style)
                     .setAdapter(arrayAdapter) {
@@ -144,7 +157,9 @@ class StyleSettingActivity : BasicKLineActivity(){
             }
 
             R.id.y_axis_position -> {
-                val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resources.getStringArray(R.array.y_axis_postion))
+                val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resources.getStringArray(
+                    R.array.y_axis_postion
+                ))
                 AlertDialog.Builder(this)
                     .setTitle(R.string.y_axis_position)
                     .setAdapter(arrayAdapter) {
@@ -166,7 +181,9 @@ class StyleSettingActivity : BasicKLineActivity(){
             }
 
             R.id.y_axis_text_position -> {
-                val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resources.getStringArray(R.array.y_axis_text_position))
+                val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resources.getStringArray(
+                    R.array.y_axis_text_position
+                ))
                 AlertDialog.Builder(this)
                     .setTitle(R.string.y_axis_text_position)
                     .setAdapter(arrayAdapter) {
@@ -189,7 +206,9 @@ class StyleSettingActivity : BasicKLineActivity(){
             }
 
             R.id.y_axis_separator_line_style -> {
-                val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resources.getStringArray(R.array.line_style))
+                val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resources.getStringArray(
+                    R.array.line_style
+                ))
                 AlertDialog.Builder(this)
                     .setTitle(R.string.y_axis_separator_line_style)
                     .setAdapter(arrayAdapter) {

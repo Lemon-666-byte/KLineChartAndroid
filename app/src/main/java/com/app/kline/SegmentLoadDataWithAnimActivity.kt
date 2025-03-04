@@ -1,10 +1,11 @@
-package com.liihuu.kline
+package com.app.kline
 
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import com.liihuu.kline.utils.DataUtils
+import com.app.kline.utils.DataUtils
 import com.app.klinechart.KLineChartView
+import com.liihuu.kline.R
 import kotlinx.android.synthetic.main.activity_segment_load_data_with_anim.*
 import kotlinx.android.synthetic.main.kline_layout.*
 

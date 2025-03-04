@@ -1,14 +1,15 @@
-package com.liihuu.kline
+package com.app.kline
 
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.PointF
 import android.os.Bundle
-import com.liihuu.kline.model.MaModel
+import com.app.kline.model.MaModel
 import com.app.klinechart.KLineChartView
 import com.app.klinechart.component.Indicator
 import com.app.klinechart.model.KLineModel
+import com.liihuu.kline.R
 import kotlinx.android.synthetic.main.activity_custom_indicator.*
 import kotlinx.android.synthetic.main.kline_layout.*
 import kotlin.math.max

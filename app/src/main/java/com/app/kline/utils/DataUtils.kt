@@ -1,9 +1,9 @@
-package com.liihuu.kline.utils
+package com.app.kline.utils
 
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
-import com.liihuu.kline.model.UiInfoModel
+import com.app.kline.model.UiInfoModel
 import com.app.klinechart.model.KLineModel
 import kotlin.math.roundToInt
 

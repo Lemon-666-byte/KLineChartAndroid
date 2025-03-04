@@ -1,4 +1,4 @@
-package com.liihuu.kline.utils
+package com.app.kline.utils
 
 import android.graphics.Paint
 import android.graphics.Rect

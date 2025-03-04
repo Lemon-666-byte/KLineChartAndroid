@@ -1,4 +1,4 @@
-package com.liihuu.kline.model
+package com.app.kline.model
 
 /**
  * @Author lihu lihu@quantdo.com.cn

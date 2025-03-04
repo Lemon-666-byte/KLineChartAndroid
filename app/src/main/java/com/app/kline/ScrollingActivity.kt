@@ -1,4 +1,6 @@
-package com.liihuu.kline
+package com.app.kline
+
+import com.liihuu.kline.R
 
 /**
  * @Author lihu hu_li888@foxmail.com

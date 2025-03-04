@@ -1,12 +1,13 @@
-package com.liihuu.kline
+package com.app.kline
 
 import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
-import com.liihuu.kline.utils.formatDate
-import com.liihuu.kline.utils.formatDecimal
+import com.app.kline.utils.formatDate
+import com.app.kline.utils.formatDecimal
 import com.app.klinechart.component.Tooltip
 import com.app.klinechart.model.KLineModel
+import com.liihuu.kline.R
 import kotlinx.android.synthetic.main.kline_layout.*
 
 /**

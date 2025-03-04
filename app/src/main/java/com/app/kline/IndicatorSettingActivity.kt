@@ -1,4 +1,4 @@
-package com.liihuu.kline
+package com.app.kline
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.klinechart.component.Indicator
+import com.liihuu.kline.R
 import kotlinx.android.synthetic.main.activity_indicator_setting.*
 import kotlinx.android.synthetic.main.kline_layout.*
 

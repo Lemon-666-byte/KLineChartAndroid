@@ -1,8 +1,8 @@
-package com.liihuu.kline
+package com.app.kline
 
 import android.os.Bundle
 import android.os.Handler
-import com.liihuu.kline.utils.DataUtils
+import com.app.kline.utils.DataUtils
 import com.app.klinechart.KLineChartView
 import kotlinx.android.synthetic.main.kline_layout.*
 

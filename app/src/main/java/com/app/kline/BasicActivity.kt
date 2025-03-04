@@ -1,8 +1,8 @@
-package com.liihuu.kline
+package com.app.kline
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.app_bar_layout.*
+import kotlinx.android.synthetic.main.app_bar_layout.toolbar
 
 /**
  * @Author lihu hu_li888@foxmail.com
