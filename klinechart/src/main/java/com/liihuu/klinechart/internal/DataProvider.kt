@@ -15,6 +15,11 @@ import kotlin.math.min
 internal class DataProvider(private val viewPortHandler: ViewPortHandler) {
     companion object {
         const val DATA_SPACE_RATE = 0.22f
+
+        /**
+         * 拖动 偏移量
+         */
+        var DATA_ADD_SPACE = 20
     }
 
     /**
@@ -99,8 +104,8 @@ internal class DataProvider(private val viewPortHandler: ViewPortHandler) {
      * 移动到最后一条数据
      */
     private fun moveToLast() {
-        this.visibleDataMinPos = if (this.dataList.size > this.visibleDataCount) {
-            this.dataList.size - this.visibleDataCount
+        this.visibleDataMinPos = if (this.dataList.size + DATA_ADD_SPACE > this.visibleDataCount) {
+            this.dataList.size + DATA_ADD_SPACE - this.visibleDataCount
         } else {
             0
         }
@@ -122,7 +127,8 @@ internal class DataProvider(private val viewPortHandler: ViewPortHandler) {
      * @param x Float
      */
     fun calcCurrentDataIndex(x: Float) {
-        val range = ceil((x.toDouble() - this.viewPortHandler.contentLeft()) / this.dataSpace).toInt()
+        val range =
+            ceil((x.toDouble() - this.viewPortHandler.contentLeft()) / this.dataSpace).toInt()
         this.currentTipDataPos = min(this.visibleDataMinPos + range - 1, this.dataList.size - 1)
         if (this.currentTipDataPos < 0) {
             this.currentTipDataPos = 0
@@ -154,10 +160,13 @@ internal class DataProvider(private val viewPortHandler: ViewPortHandler) {
 
         // 计算缩放后的range大小
         this.visibleDataCount = (touchRange / scaleX).toInt()
-        this.visibleDataCount = min(max(this.visibleDataCount, this.minVisibleDataCount), this.maxVisibleDataCount)
+        this.visibleDataCount =
+            min(max(this.visibleDataCount, this.minVisibleDataCount), this.maxVisibleDataCount)
         val minPos = touchStartMinPos + touchRange - this.visibleDataCount
         when {
-            minPos + this.visibleDataCount > this.dataList.size -> this.visibleDataMinPos = 0
+            minPos + this.visibleDataCount > this.dataList.size + DATA_ADD_SPACE -> this.visibleDataMinPos =
+                0
+
             minPos < 0 -> this.visibleDataMinPos = 0
             else -> this.visibleDataMinPos = minPos
         }
@@ -172,11 +181,13 @@ internal class DataProvider(private val viewPortHandler: ViewPortHandler) {
      * @return Boolean
      */
     fun calcDrag(
-        moveDist: Float, touchMovePoint: PointF,
-        eventX: Float, noMore: Boolean,
+        moveDist: Float,
+        touchMovePoint: PointF,
+        eventX: Float,
+        noMore: Boolean,
         loadMoreListener: KLineChartView.LoadMoreListener?
     ): Boolean {
-        val dataSize = this.dataList.size
+        val dataSize = this.dataList.size + DATA_ADD_SPACE
         when {
             moveDist < 0 - this.dataSpace / 2 -> {
 
@@ -216,10 +227,7 @@ internal class DataProvider(private val viewPortHandler: ViewPortHandler) {
                     this.visibleDataMinPos = 0
                 }
 
-                if (this.visibleDataMinPos == 0 &&
-                    !noMore &&
-                    !this.isLoading &&
-                    loadMoreListener != null) {
+                if (this.visibleDataMinPos == 0 && !noMore && !this.isLoading && loadMoreListener != null) {
                     this.isLoading = true
                     loadMoreListener.loadMore()
                 }
