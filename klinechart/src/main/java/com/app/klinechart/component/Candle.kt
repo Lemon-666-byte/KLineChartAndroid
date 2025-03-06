@@ -197,4 +197,6 @@ class Candle {
      * 值格式化
      */
     var valueFormatter: ValueFormatter? = null
+
+    var logoBitmap: Bitmap? = null
 }

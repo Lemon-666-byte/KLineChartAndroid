@@ -1,6 +1,10 @@
 package com.app.klinechart.chart
 
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.DashPathEffect
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.PointF
 import com.app.klinechart.component.Candle
 import com.app.klinechart.component.Component
 import com.app.klinechart.component.Indicator
@@ -35,8 +39,7 @@ internal class CandleChart(
      * @constructor
      */
     private data class HighLowPriceMark(
-        val x: Float,
-        val price: Double
+        val x: Float, val price: Double
     )
 
     /**
@@ -77,8 +80,20 @@ internal class CandleChart(
     private val dp3ToPx = Utils.convertDpToPixel(3f)
     private val dp2ToPx = Utils.convertDpToPixel(2f)
     private val dp6ToPx = Utils.convertDpToPixel(6f)
+    private val dp10ToPx = Utils.convertDpToPixel(10f)
+    private val dp30ToPx = Utils.convertDpToPixel(30f)
+
+    private fun drawLogo(canvas: Canvas) {
+        candle.logoBitmap?.let {
+            val left: Float = dp10ToPx
+            canvas.drawBitmap(
+                it, left, this.height - dp30ToPx, paint
+            )
+        }
+    }
 
     override fun drawChart(canvas: Canvas) {
+        drawLogo(canvas)
         if (this.candle.chartStyle != Candle.ChartStyle.TIME_LINE) {
             drawCandle(canvas)
             drawIndicator(canvas)
@@ -151,10 +166,13 @@ internal class CandleChart(
         val drawPriceMarkListener = this.candle.drawPriceMarkListener
         if (drawPriceMarkListener != null) {
             drawPriceMarkListener.draw(
-                canvas, paint, type,
+                canvas,
+                paint,
+                type,
                 PointF(x, priceY),
                 this.viewPortHandler.contentRect,
-                this.candle, price
+                this.candle,
+                price
             )
         } else {
             val start = x + this.dp3ToPx
@@ -179,9 +197,15 @@ internal class CandleChart(
                 style = Paint.Style.FILL
                 textSize = candle.lowestHighestPriceMarkTextSize
             }
-            val priceText = this.candle.valueFormatter?.format(price.toString()) ?: price.defaultFormatDecimal()
+            val priceText =
+                this.candle.valueFormatter?.format(price.toString()) ?: price.defaultFormatDecimal()
             val priceTextHeight = Utils.calcTextHeight(this.paint, priceText)
-            canvas.drawText(priceText, this.markLinePoints[2] + this.dp3ToPx, priceY + priceTextHeight / 2, this.paint)
+            canvas.drawText(
+                priceText,
+                this.markLinePoints[2] + this.dp3ToPx,
+                priceY + priceTextHeight / 2,
+                this.paint
+            )
         }
     }
 
@@ -203,14 +227,19 @@ internal class CandleChart(
         }
         val lastPrice = dataList[dataSize - 1].closePrice
         var priceY = this.yAxisChart.getY(lastPrice)
-        priceY = max(this.offsetTop + this.height * 0.05f, min(priceY, this.offsetTop + this.height * 0.98f))
+        priceY = max(
+            this.offsetTop + this.height * 0.05f, min(priceY, this.offsetTop + this.height * 0.98f)
+        )
         val drawPriceMarkListener = this.candle.drawPriceMarkListener
         if (drawPriceMarkListener != null) {
             drawPriceMarkListener.draw(
-                canvas, this.paint, Candle.DrawPriceMarkListener.LAST,
+                canvas,
+                this.paint,
+                Candle.DrawPriceMarkListener.LAST,
                 PointF(this.viewPortHandler.contentLeft(), priceY),
                 this.viewPortHandler.contentRect,
-                this.candle, lastPrice
+                this.candle,
+                lastPrice
             )
         } else {
             if (this.candle.lastPriceMarkLineStyle == Component.LineStyle.DASH) {
@@ -238,58 +267,61 @@ internal class CandleChart(
             color = candle.timeLineColor
             style = Paint.Style.STROKE
         }
-        this.timeLineAreaPath.moveTo(this.viewPortHandler.contentLeft(), this.offsetTop + this.height)
+        this.timeLineAreaPath.moveTo(
+            this.viewPortHandler.contentLeft(), this.offsetTop + this.height
+        )
         val visibleDataMinPos = this.dataProvider.visibleDataMinPos
         val visibleDataCount = this.dataProvider.visibleDataCount
         val dataSize = this.dataProvider.dataList.size
-        val onDrawing: (i: Int, x: Float, halfBarSpace: Float, kLineModel: KLineModel) -> Unit = { i, x, _, kLineModel ->
-            val closeY = this.yAxisChart.getY(kLineModel.closePrice)
-            val averagePrice = kLineModel.averagePrice
-            val averagePriceY = this.yAxisChart.getY(averagePrice)
-            when (i) {
-                visibleDataMinPos -> {
-                    this.linePath.moveTo(x, closeY)
-                    if (averagePrice != 0.0) {
-                        this.timeAverageLinePath.moveTo(x, averagePriceY)
+        val onDrawing: (i: Int, x: Float, halfBarSpace: Float, kLineModel: KLineModel) -> Unit =
+            { i, x, _, kLineModel ->
+                val closeY = this.yAxisChart.getY(kLineModel.closePrice)
+                val averagePrice = kLineModel.averagePrice
+                val averagePriceY = this.yAxisChart.getY(averagePrice)
+                when (i) {
+                    visibleDataMinPos -> {
+                        this.linePath.moveTo(x, closeY)
+                        if (averagePrice != 0.0) {
+                            this.timeAverageLinePath.moveTo(x, averagePriceY)
+                        }
+                        this.timeLineAreaPath.apply {
+                            lineTo(viewPortHandler.contentLeft(), closeY)
+                            lineTo(x, closeY)
+                        }
                     }
-                    this.timeLineAreaPath.apply {
-                        lineTo(viewPortHandler.contentLeft(), closeY)
-                        lineTo(x, closeY)
-                    }
-                }
 
-                visibleDataMinPos + visibleDataCount - 1 -> {
-                    this.linePath.lineTo(x, closeY)
-                    if (averagePrice != 0.0) {
-                        this.timeAverageLinePath.lineTo(x, averagePriceY)
+                    visibleDataMinPos + visibleDataCount - 1 -> {
+                        this.linePath.lineTo(x, closeY)
+                        if (averagePrice != 0.0) {
+                            this.timeAverageLinePath.lineTo(x, averagePriceY)
+                        }
+                        this.timeLineAreaPath.apply {
+                            lineTo(x, closeY)
+                            lineTo(viewPortHandler.contentRight(), closeY)
+                            lineTo(viewPortHandler.contentRight(), offsetTop + height)
+                        }
                     }
-                    this.timeLineAreaPath.apply {
-                        lineTo(x, closeY)
-                        lineTo(viewPortHandler.contentRight(), closeY)
-                        lineTo(viewPortHandler.contentRight(), offsetTop + height)
-                    }
-                }
 
-                dataSize - 1 -> {
-                    this.linePath.lineTo(x, closeY)
-                    if (averagePrice != 0.0) {
-                        this.timeAverageLinePath.lineTo(x, averagePriceY)
+                    dataSize - 1 -> {
+                        this.linePath.lineTo(x, closeY)
+                        if (averagePrice != 0.0) {
+                            this.timeAverageLinePath.lineTo(x, averagePriceY)
+                        }
+                        this.timeLineAreaPath.apply {
+                            lineTo(x, closeY)
+                            lineTo(x, offsetTop + height)
+                        }
                     }
-                    this.timeLineAreaPath.apply {
-                        lineTo(x, closeY)
-                        lineTo(x, offsetTop + height)
-                    }
-                }
 
-                else -> {
-                    this.linePath.lineTo(x, closeY)
-                    if (averagePrice != 0.0) {
-                        this.timeAverageLinePath.lineTo(x, averagePriceY)
+                    else -> {
+                        this.linePath.lineTo(x, closeY)
+                        if (averagePrice != 0.0) {
+                            this.timeAverageLinePath.lineTo(x, averagePriceY)
+                        }
+                        this.timeLineAreaPath.lineTo(x, closeY)
                     }
-                    this.timeLineAreaPath.lineTo(x, closeY)
                 }
             }
-        }
 
         this.drawGraphs(canvas, onDrawing) {
             // 绘制分时线
@@ -326,36 +358,42 @@ internal class CandleChart(
         var highestPriceX = -1f
         var lowestPriceX = -1f
         val dataList = this.dataProvider.dataList
-        val onDrawing: (i: Int, x: Float, halfBarSpace: Float, kLineModel: KLineModel) -> Unit = { i, x, halfBarSpace, kLineModel ->
-            var refKLineModel: KLineModel? = null
-            if (i > 0) {
-                refKLineModel = dataList[i - 1]
-            }
-            val refClosePrice = refKLineModel?.closePrice ?: Double.NEGATIVE_INFINITY
-            val closePrice = kLineModel.closePrice
-            val highPrice = kLineModel.highPrice
-            val lowPrice = kLineModel.lowPrice
-            if (closePrice > refClosePrice) {
-                this.paint.color = increasingColor
-            } else {
-                this.paint.color = decreasingColor
-            }
-            drawCandleItem(
-                canvas, x, halfBarSpace, refClosePrice,
-                kLineModel.openPrice, closePrice,
-                highPrice, lowPrice
-            )
+        val onDrawing: (i: Int, x: Float, halfBarSpace: Float, kLineModel: KLineModel) -> Unit =
+            { i, x, halfBarSpace, kLineModel ->
+                var refKLineModel: KLineModel? = null
+                if (i > 0) {
+                    refKLineModel = dataList[i - 1]
+                }
+                val refClosePrice = refKLineModel?.closePrice ?: Double.NEGATIVE_INFINITY
+                val closePrice = kLineModel.closePrice
+                val highPrice = kLineModel.highPrice
+                val lowPrice = kLineModel.lowPrice
+                if (closePrice > refClosePrice) {
+                    this.paint.color = increasingColor
+                } else {
+                    this.paint.color = decreasingColor
+                }
+                drawCandleItem(
+                    canvas,
+                    x,
+                    halfBarSpace,
+                    refClosePrice,
+                    kLineModel.openPrice,
+                    closePrice,
+                    highPrice,
+                    lowPrice
+                )
 
-            if (highestPrice < highPrice) {
-                highestPrice = highPrice
-                highestPriceX = x
-            }
+                if (highestPrice < highPrice) {
+                    highestPrice = highPrice
+                    highestPriceX = x
+                }
 
-            if (lowPrice < lowestPrice) {
-                lowestPrice = lowPrice
-                lowestPriceX = x
+                if (lowPrice < lowestPrice) {
+                    lowestPrice = lowPrice
+                    lowestPriceX = x
+                }
             }
-        }
 
         drawGraphs(canvas, onDrawing, {})
 
@@ -376,27 +414,30 @@ internal class CandleChart(
      * @param lowPrice Double
      */
     private fun drawCandleItem(
-        canvas: Canvas, x: Float,
-        halfBarSpace: Float, refClosePrice: Double,
-        openPrice: Double, closePrice: Double,
-        highPrice: Double, lowPrice: Double) {
+        canvas: Canvas,
+        x: Float,
+        halfBarSpace: Float,
+        refClosePrice: Double,
+        openPrice: Double,
+        closePrice: Double,
+        highPrice: Double,
+        lowPrice: Double
+    ) {
         when (candle.candleStyle) {
             Candle.CandleStyle.SOLID -> {
                 this.paint.style = Paint.Style.FILL
                 drawCandleReact(
-                    canvas, x, halfBarSpace,
-                    openPrice, closePrice,
-                    highPrice, lowPrice
+                    canvas, x, halfBarSpace, openPrice, closePrice, highPrice, lowPrice
                 )
             }
+
             Candle.CandleStyle.STROKE -> {
                 this.paint.style = Paint.Style.STROKE
                 drawCandleReact(
-                    canvas, x, halfBarSpace,
-                    openPrice, closePrice,
-                    highPrice, lowPrice
+                    canvas, x, halfBarSpace, openPrice, closePrice, highPrice, lowPrice
                 )
             }
+
             Candle.CandleStyle.INCREASING_STROKE -> {
                 if (closePrice > refClosePrice) {
                     this.paint.style = Paint.Style.STROKE
@@ -404,11 +445,10 @@ internal class CandleChart(
                     this.paint.style = Paint.Style.FILL
                 }
                 drawCandleReact(
-                    canvas, x, halfBarSpace,
-                    openPrice, closePrice,
-                    highPrice, lowPrice
+                    canvas, x, halfBarSpace, openPrice, closePrice, highPrice, lowPrice
                 )
             }
+
             Candle.CandleStyle.DECREASING_STROKE -> {
                 if (closePrice > refClosePrice) {
                     this.paint.style = Paint.Style.FILL
@@ -416,18 +456,25 @@ internal class CandleChart(
                     this.paint.style = Paint.Style.STROKE
                 }
                 drawCandleReact(
-                    canvas, x, halfBarSpace,
-                    openPrice, closePrice,
-                    highPrice, lowPrice
+                    canvas, x, halfBarSpace, openPrice, closePrice, highPrice, lowPrice
                 )
             }
+
             Candle.CandleStyle.OHLC -> {
                 drawOhlc(
-                    canvas, x, halfBarSpace, refClosePrice,
-                    openPrice, closePrice, highPrice, lowPrice,
-                    candle.increasingColor, candle.decreasingColor
+                    canvas,
+                    x,
+                    halfBarSpace,
+                    refClosePrice,
+                    openPrice,
+                    closePrice,
+                    highPrice,
+                    lowPrice,
+                    candle.increasingColor,
+                    candle.decreasingColor
                 )
             }
+
             else -> {}
         }
     }
@@ -437,9 +484,14 @@ internal class CandleChart(
      * @param canvas Canvas
      */
     private fun drawCandleReact(
-        canvas: Canvas, x: Float, halfBarSpace: Float,
-        openPrice: Double, closePrice:
-        Double, highPrice: Double, lowPrice: Double) {
+        canvas: Canvas,
+        x: Float,
+        halfBarSpace: Float,
+        openPrice: Double,
+        closePrice: Double,
+        highPrice: Double,
+        lowPrice: Double
+    ) {
         val priceY = getPriceY(openPrice, closePrice, highPrice, lowPrice)
         this.shadowBuffers[0] = x
         this.shadowBuffers[2] = x
@@ -452,12 +504,14 @@ internal class CandleChart(
                 this.shadowBuffers[5] = priceY[3]
                 this.shadowBuffers[7] = priceY[1]
             }
+
             closePrice > openPrice -> {
                 this.shadowBuffers[1] = priceY[2]
                 this.shadowBuffers[3] = priceY[1]
                 this.shadowBuffers[5] = priceY[3]
                 this.shadowBuffers[7] = priceY[0]
             }
+
             else -> {
                 this.shadowBuffers[1] = priceY[2]
                 this.shadowBuffers[3] = priceY[0]
@@ -471,18 +525,23 @@ internal class CandleChart(
         this.bodyBuffers[2] = x + halfBarSpace
         this.bodyBuffers[3] = priceY[0]
 
-        if (this.bodyBuffers[1] == this.bodyBuffers[3] ||
-            abs(this.bodyBuffers[1] - this.bodyBuffers[3]) < this.candleLineSize) {
+        if (this.bodyBuffers[1] == this.bodyBuffers[3] || abs(this.bodyBuffers[1] - this.bodyBuffers[3]) < this.candleLineSize) {
             this.paint.strokeWidth = this.candleLineSize
             canvas.drawLine(
-                this.bodyBuffers[0], this.bodyBuffers[1],
-                this.bodyBuffers[2], this.bodyBuffers[1],
-                this.paint)
+                this.bodyBuffers[0],
+                this.bodyBuffers[1],
+                this.bodyBuffers[2],
+                this.bodyBuffers[1],
+                this.paint
+            )
         } else {
             canvas.drawRect(
-                this.bodyBuffers[0], this.bodyBuffers[1],
-                this.bodyBuffers[2], this.bodyBuffers[3],
-                this.paint)
+                this.bodyBuffers[0],
+                this.bodyBuffers[1],
+                this.bodyBuffers[2],
+                this.bodyBuffers[3],
+                this.paint
+            )
         }
 
         canvas.drawLines(this.shadowBuffers, this.paint)
