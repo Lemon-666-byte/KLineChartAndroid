@@ -212,17 +212,19 @@ internal class TouchEvent(
                 val deltaY = currentY - lastY
                 if (abs(deltaY.toDouble()) > SWIPE_THRESHOLD) {
                     if (deltaY > 0) {
-                        // 向下滑动
-                        // 处理向下滑动逻辑
-                        Log.e("TouchEvent", "向下滑动 deltaY->" + abs(deltaY.toDouble()))
-                        DataProvider.axisMinScale += deltaY
-                        DataProvider.axisMaxScale += deltaY
+                        // 向下滑动，缩小 axisScale
+                        DataProvider.axisScale *= 1.01f
+                        Log.e(
+                            "TouchEvent",
+                            "向下滑动 ->" + DataProvider.axisScale + " deltaY->" + abs(deltaY.toDouble())
+                        )
                     } else {
-                        // 向上滑动
-                        // 处理向上滑动逻辑
-                        Log.e("TouchEvent", "向上滑动 deltaY->" + abs(deltaY.toDouble()))
-                        DataProvider.axisMinScale -= deltaY
-                        DataProvider.axisMaxScale -= deltaY
+                        // 向上滑动，增大 axisScale
+                        DataProvider.axisScale *= 0.99f
+                        Log.e(
+                            "TouchEvent",
+                            "向上滑动 ->" + DataProvider.axisScale + " deltaY->" + abs(deltaY.toDouble())
+                        )
                     }
                 }
                 lastY = currentY

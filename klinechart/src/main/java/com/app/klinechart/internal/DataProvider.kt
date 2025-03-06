@@ -21,9 +21,7 @@ internal class DataProvider(private val viewPortHandler: ViewPortHandler) {
          */
         var DATA_SPACE = 20
 
-        var axisMinScale = 0f
-
-        var axisMaxScale = 0f
+        var axisScale = 100f
     }
 
 

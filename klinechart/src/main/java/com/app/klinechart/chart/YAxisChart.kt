@@ -263,8 +263,8 @@ internal class YAxisChart(
         }
 
         if (minMaxArray[0] != Double.POSITIVE_INFINITY && minMaxArray[1] != Double.NEGATIVE_INFINITY) {
-            this.axisMinimum = minMaxArray[0].toFloat() - DataProvider.axisMinScale
-            this.axisMaximum = minMaxArray[1].toFloat() + DataProvider.axisMaxScale
+            this.axisMinimum = minMaxArray[0].toFloat() - DataProvider.axisScale
+            this.axisMaximum = minMaxArray[1].toFloat() + DataProvider.axisScale
         }
     }
 
