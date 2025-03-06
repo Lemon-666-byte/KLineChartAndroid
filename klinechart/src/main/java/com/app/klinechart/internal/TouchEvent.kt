@@ -3,6 +3,7 @@ package com.app.klinechart.internal
 import android.annotation.SuppressLint
 import android.graphics.PointF
 import android.os.Build
+import android.util.Log
 import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.view.View
@@ -133,6 +134,10 @@ internal class TouchEvent(
      */
     private var decelerationLastTime = 0L
 
+    private var lastY = 0f
+
+    val SWIPE_THRESHOLD: Int = 0 // 滑动阈值
+
     private val runnable = Runnable {
         if (this.touchMode == TOUCH_NO || this.touchMode == TOUCH_CROSS_CANCEL) {
             this.touchMode = TOUCH_CROSS
@@ -154,7 +159,7 @@ internal class TouchEvent(
             }
             velocityTracker?.addMovement(event)
         }
-        when(event.actionMasked) {
+        when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
                 this.touchStartPoint.set(event.x, event.y)
                 this.touchMovePoint.set(event.rawX, event.rawY)
@@ -163,7 +168,8 @@ internal class TouchEvent(
                 }
                 this.decelerationVelocityX = 0f
                 if (this.touchMode == TOUCH_CROSS) {
-                    val crossRadius = distance(event.x, this.touchCrossPoint.x, event.y, this.touchCrossPoint.y)
+                    val crossRadius =
+                        distance(event.x, this.touchCrossPoint.x, event.y, this.touchCrossPoint.y)
                     if (crossRadius < CROSS_EVENT_MIN_RADIUS) {
                         return performCross(event)
                     } else {
@@ -202,31 +208,54 @@ internal class TouchEvent(
                 if (!checkEventAvailability()) {
                     return false
                 }
+                val currentY = event.y
+                val deltaY = currentY - lastY
+                if (abs(deltaY.toDouble()) > SWIPE_THRESHOLD) {
+                    if (deltaY > 0) {
+                        // 向下滑动
+                        // 处理向下滑动逻辑
+                        Log.e("TouchEvent", "向下滑动 deltaY->" + abs(deltaY.toDouble()))
+                        DataProvider.axisMinScale += deltaY
+                        DataProvider.axisMaxScale += deltaY
+                    } else {
+                        // 向上滑动
+                        // 处理向上滑动逻辑
+                        Log.e("TouchEvent", "向上滑动 deltaY->" + abs(deltaY.toDouble()))
+                        DataProvider.axisMinScale -= deltaY
+                        DataProvider.axisMaxScale -= deltaY
+                    }
+                }
+                lastY = currentY
                 // 子控件相对于父布局若达到滚动条件，则让父布局拦截触摸事件
-                if (abs(event.rawY - this.touchMovePoint.y) > 50 &&
-                    abs(event.rawX - this.touchMovePoint.x) < 150 &&
-                    (this.touchMode == TOUCH_NO || this.touchMode == TOUCH_CROSS_CANCEL)) {
+                if (abs(event.rawY - this.touchMovePoint.y) > 50 && abs(event.rawX - this.touchMovePoint.x) < 150 && (this.touchMode == TOUCH_NO || this.touchMode == TOUCH_CROSS_CANCEL)) {
                     this.chart.parent?.requestDisallowInterceptTouchEvent(false)
                 }
-
                 when (this.touchMode) {
                     TOUCH_ZOOM -> {
                         this.chart.parent?.requestDisallowInterceptTouchEvent(true)
                         return performZoom(event)
                     }
+
                     TOUCH_DRAG -> {
                         this.chart.parent?.requestDisallowInterceptTouchEvent(true)
                         return performDrag(event)
                     }
+
                     TOUCH_CROSS -> {
                         this.chart.parent?.requestDisallowInterceptTouchEvent(true)
                         return performCross(event)
                     }
+
                     TOUCH_CROSS_CANCEL -> {
                         this.chart.removeCallbacks(this.runnable)
                     }
+
                     TOUCH_NO -> {
-                        val distance = abs(distance(event.x, this.touchStartPoint.x, event.y, this.touchStartPoint.y))
+                        val distance = abs(
+                            distance(
+                                event.x, this.touchStartPoint.x, event.y, this.touchStartPoint.y
+                            )
+                        )
                         if (distance > this.dragTriggerDist) {
                             val distanceX = abs(event.x - this.touchStartPoint.x)
                             val distanceY = abs(event.y - this.touchStartPoint.y)
@@ -310,7 +339,9 @@ internal class TouchEvent(
      */
     private fun performDrag(event: MotionEvent): Boolean {
         val moveDist = event.x - this.touchMovePoint.x
-        val isConsume = this.dataProvider.calcDrag(moveDist, this.touchMovePoint, event.x, this.chart.noMore, this.chart.loadMoreListener)
+        val isConsume = this.dataProvider.calcDrag(
+            moveDist, this.touchMovePoint, event.x, this.chart.noMore, this.chart.loadMoreListener
+        )
         if (isConsume) {
             this.chart.invalidate()
         }
@@ -324,11 +355,13 @@ internal class TouchEvent(
     private fun performZoom(event: MotionEvent): Boolean {
         if (event.pointerCount >= 2) {
             val totalDist = spacing(event)
-            if (totalDist > this.minScalePointerDistance)  {
+            if (totalDist > this.minScalePointerDistance) {
                 val xDist = getXDist(event)
                 // x轴方向 scale
                 val scaleX = xDist / this.savedXDist
-                val isConsume = this.dataProvider.calcZoom(scaleX, this.touchRange, this.touchStartDataVisibleMinPos)
+                val isConsume = this.dataProvider.calcZoom(
+                    scaleX, this.touchRange, this.touchStartDataVisibleMinPos
+                )
                 if (isConsume) {
                     this.chart.invalidate()
                 }
@@ -354,7 +387,9 @@ internal class TouchEvent(
      * 处理惯性滚动
      */
     fun computeScroll() {
-        if (this.decelerationVelocityX == 0f) { return }
+        if (this.decelerationVelocityX == 0f) {
+            return
+        }
 
         val currentTime = AnimationUtils.currentAnimationTimeMillis()
         this.decelerationVelocityX *= 0.9f
@@ -365,8 +400,7 @@ internal class TouchEvent(
         this.decelerationCurrentX += distanceX
 
         val event = MotionEvent.obtain(
-            currentTime, currentTime, MotionEvent.ACTION_MOVE,
-            this.decelerationCurrentX, 0f, 0
+            currentTime, currentTime, MotionEvent.ACTION_MOVE, this.decelerationCurrentX, 0f, 0
         )
 
         performDrag(event)
@@ -432,10 +466,7 @@ internal class TouchEvent(
      * 检查事件有效性
      */
     private fun checkEventAvailability(): Boolean {
-        return !(this.touchStartPoint.x < this.viewPortHandler.contentLeft() ||
-                this.touchStartPoint.x > this.viewPortHandler.contentRight() ||
-                this.touchStartPoint.y < this.viewPortHandler.contentTop() ||
-                this.touchStartPoint.y > this.viewPortHandler.contentBottom())
+        return !(this.touchStartPoint.x < this.viewPortHandler.contentLeft() || this.touchStartPoint.x > this.viewPortHandler.contentRight() || this.touchStartPoint.y < this.viewPortHandler.contentTop() || this.touchStartPoint.y > this.viewPortHandler.contentBottom())
     }
 
     /**
@@ -448,8 +479,10 @@ internal class TouchEvent(
         if (event.pointerCount < 2) {
             return 0f
         }
-        val x = abs(event.getX(event.getPointerId(0)) - event.getX(event.getPointerId(1))).toDouble()
-        val y = abs(event.getY(event.getPointerId(0)) - event.getY(event.getPointerId(1))).toDouble()
+        val x =
+            abs(event.getX(event.getPointerId(0)) - event.getX(event.getPointerId(1))).toDouble()
+        val y =
+            abs(event.getY(event.getPointerId(0)) - event.getY(event.getPointerId(1))).toDouble()
         return sqrt(x * x + y * y).toFloat()
     }
 

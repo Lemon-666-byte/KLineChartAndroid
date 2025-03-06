@@ -1057,6 +1057,8 @@ class KLineChartView @JvmOverloads constructor(
     override fun onDetachedFromWindow() {
         // 关闭线程池，移除所有消息
         this.mainScope.cancel()
+        DataProvider.axisMinScale = 0f
+        DataProvider.axisMaxScale = 0f
         super.onDetachedFromWindow()
     }
 }

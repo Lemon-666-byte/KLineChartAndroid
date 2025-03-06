@@ -20,6 +20,10 @@ internal class DataProvider(private val viewPortHandler: ViewPortHandler) {
          * 拖动 偏移量
          */
         var DATA_SPACE = 20
+
+        var axisMinScale = 0f
+
+        var axisMaxScale = 0f
     }
 
 

@@ -60,9 +60,21 @@ internal class YAxisChart(
         }
         val endY = this.offsetTop + this.height
         if (this.axis.yAxisPosition == YAxis.AxisPosition.LEFT) {
-            canvas.drawLine(this.viewPortHandler.contentLeft(), this.offsetTop, this.viewPortHandler.contentLeft(), endY, this.paint)
+            canvas.drawLine(
+                this.viewPortHandler.contentLeft(),
+                this.offsetTop,
+                this.viewPortHandler.contentLeft(),
+                endY,
+                this.paint
+            )
         } else {
-            canvas.drawLine(this.viewPortHandler.contentRight(), this.offsetTop, this.viewPortHandler.contentRight(), endY, this.paint)
+            canvas.drawLine(
+                this.viewPortHandler.contentRight(),
+                this.offsetTop,
+                this.viewPortHandler.contentRight(),
+                endY,
+                this.paint
+            )
         }
     }
 
@@ -115,15 +127,16 @@ internal class YAxisChart(
         }
         for (i in this.labelValues.indices) {
             val labelY = getY(this.labelValues[i])
-            var label = BigDecimal(this.labelValues[i]).setScale(this.axisValueDecimals, BigDecimal.ROUND_DOWN).toString()
+            var label = BigDecimal(this.labelValues[i]).setScale(
+                this.axisValueDecimals, BigDecimal.ROUND_DOWN
+            ).toString()
             label = this.axis.valueFormatter?.format(
                 indicatorType, this.labelValues[i]
             ) ?: label
             val labelHeight = Utils.calcTextHeight(this.paint, label)
             val halfLabelHeight = labelHeight / 2
             if (checkShowLabel(labelY, labelHeight)) {
-                if ((this.axis.yAxisPosition == YAxis.AxisPosition.LEFT && this.axis.yAxisTextPosition == YAxis.TextPosition.OUTSIDE) ||
-                    (this.axis.yAxisPosition == YAxis.AxisPosition.RIGHT && this.axis.yAxisTextPosition != YAxis.TextPosition.OUTSIDE)) {
+                if ((this.axis.yAxisPosition == YAxis.AxisPosition.LEFT && this.axis.yAxisTextPosition == YAxis.TextPosition.OUTSIDE) || (this.axis.yAxisPosition == YAxis.AxisPosition.RIGHT && this.axis.yAxisTextPosition != YAxis.TextPosition.OUTSIDE)) {
                     this.paint.textAlign = Paint.Align.RIGHT
                 } else {
                     this.paint.textAlign = Paint.Align.LEFT
@@ -175,7 +188,7 @@ internal class YAxisChart(
      */
     override fun drawTickLines(canvas: Canvas) {
         if (!this.axis.displayTickLine) {
-           return
+            return
         }
         this.paint.apply {
             strokeWidth = 1f
@@ -216,7 +229,8 @@ internal class YAxisChart(
      * @param labelHeight Float
      * @return Boolean
      */
-    private fun checkShowLabel(y: Float, labelHeight: Int) = y > this.offsetTop + labelHeight && y < this.offsetTop + this.height - labelHeight
+    private fun checkShowLabel(y: Float, labelHeight: Int) =
+        y > this.offsetTop + labelHeight && y < this.offsetTop + this.height - labelHeight
 
     /**
      * 计算y轴数据的最大最小值
@@ -249,8 +263,8 @@ internal class YAxisChart(
         }
 
         if (minMaxArray[0] != Double.POSITIVE_INFINITY && minMaxArray[1] != Double.NEGATIVE_INFINITY) {
-            this.axisMinimum = minMaxArray[0].toFloat()
-            this.axisMaximum = minMaxArray[1].toFloat()
+            this.axisMinimum = minMaxArray[0].toFloat() - DataProvider.axisMinScale
+            this.axisMaximum = minMaxArray[1].toFloat() + DataProvider.axisMaxScale
         }
     }
 
@@ -261,27 +275,43 @@ internal class YAxisChart(
      * @param minMaxArray DoubleArray
      * @return DoubleArray
      */
-    private fun calcIndexMinMax(indicatorType: String, kLineModel: KLineModel, minMaxArray: DoubleArray): DoubleArray {
+    private fun calcIndexMinMax(
+        indicatorType: String, kLineModel: KLineModel, minMaxArray: DoubleArray
+    ): DoubleArray {
         when (indicatorType) {
             Indicator.Type.NO -> {}
             Indicator.Type.MA -> {
                 minMaxArray[0] = min(kLineModel.ma?.ma5 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[0] = min(kLineModel.ma?.ma10 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[0] = min(kLineModel.ma?.ma20 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[0] = min(kLineModel.ma?.ma60 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.ma?.ma10 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.ma?.ma20 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.ma?.ma60 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
                 minMaxArray[1] = max(kLineModel.ma?.ma5 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
-                minMaxArray[1] = max(kLineModel.ma?.ma10 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
-                minMaxArray[1] = max(kLineModel.ma?.ma20 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
-                minMaxArray[1] = max(kLineModel.ma?.ma60 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.ma?.ma10 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.ma?.ma20 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.ma?.ma60 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
             }
+
             Indicator.Type.MACD -> {
-                minMaxArray[0] = min(kLineModel.macd?.dea ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[0] = min(kLineModel.macd?.diff ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[0] = min(kLineModel.macd?.macd ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[1] = max(kLineModel.macd?.dea ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
-                minMaxArray[1] = max(kLineModel.macd?.diff ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
-                minMaxArray[1] = max(kLineModel.macd?.macd ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[0] =
+                    min(kLineModel.macd?.dea ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.macd?.diff ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.macd?.macd ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[1] =
+                    max(kLineModel.macd?.dea ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.macd?.diff ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.macd?.macd ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
             }
+
             Indicator.Type.VOL -> {
                 minMaxArray[0] = min(kLineModel.vol?.ma5 ?: 0.0, 0.0)
                 minMaxArray[0] = min(kLineModel.vol?.ma10 ?: 0.0, 0.0)
@@ -292,34 +322,57 @@ internal class YAxisChart(
                 minMaxArray[1] = max(kLineModel.vol?.ma20 ?: 0.0, minMaxArray[1])
                 minMaxArray[1] = max(kLineModel.vol?.num ?: 0.0, minMaxArray[1])
             }
+
             Indicator.Type.BOLL -> {
-                minMaxArray[0] = min(kLineModel.boll?.up ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[0] = min(kLineModel.boll?.mid ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[0] = min(kLineModel.boll?.dn ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.boll?.up ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.boll?.mid ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.boll?.dn ?: Double.POSITIVE_INFINITY, minMaxArray[0])
                 minMaxArray[0] = min(kLineModel.lowPrice, minMaxArray[0])
-                minMaxArray[1] = max(kLineModel.boll?.up ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
-                minMaxArray[1] = max(kLineModel.boll?.mid ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
-                minMaxArray[1] = max(kLineModel.boll?.dn ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.boll?.up ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.boll?.mid ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.boll?.dn ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
                 minMaxArray[1] = max(kLineModel.highPrice, minMaxArray[1])
             }
+
             Indicator.Type.BIAS -> {
-                minMaxArray[0] = min(kLineModel.bias?.bias1 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[0] = min(kLineModel.bias?.bias2 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[0] = min(kLineModel.bias?.bias3 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[1] = max(kLineModel.bias?.bias1 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
-                minMaxArray[1] = max(kLineModel.bias?.bias2 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
-                minMaxArray[1] = max(kLineModel.bias?.bias3 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[0] =
+                    min(kLineModel.bias?.bias1 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.bias?.bias2 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.bias?.bias3 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[1] =
+                    max(kLineModel.bias?.bias1 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.bias?.bias2 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.bias?.bias3 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
             }
+
             Indicator.Type.BRAR -> {
-                minMaxArray[0] = min(kLineModel.brar?.br ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[0] = min(kLineModel.brar?.ar ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[1] = max(kLineModel.brar?.br ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
-                minMaxArray[1] = max(kLineModel.brar?.ar ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[0] =
+                    min(kLineModel.brar?.br ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.brar?.ar ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[1] =
+                    max(kLineModel.brar?.br ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.brar?.ar ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
             }
+
             Indicator.Type.CCI -> {
-                minMaxArray[0] = min(kLineModel.cci?.cci ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[1] = max(kLineModel.cci?.cci ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[0] =
+                    min(kLineModel.cci?.cci ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[1] =
+                    max(kLineModel.cci?.cci ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
             }
+
             Indicator.Type.CR -> {
                 minMaxArray[0] = min(kLineModel.cr?.cr ?: Double.POSITIVE_INFINITY, minMaxArray[0])
                 minMaxArray[0] = min(kLineModel.cr?.ma1 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
@@ -332,23 +385,38 @@ internal class YAxisChart(
                 minMaxArray[1] = max(kLineModel.cr?.ma3 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
                 minMaxArray[1] = max(kLineModel.cr?.ma4 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
             }
+
             Indicator.Type.DMA -> {
-                minMaxArray[0] = min(kLineModel.dma?.dif ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[0] = min(kLineModel.dma?.difMa ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[1] = max(kLineModel.dma?.dif ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
-                minMaxArray[1] = max(kLineModel.dma?.difMa ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[0] =
+                    min(kLineModel.dma?.dif ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.dma?.difMa ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[1] =
+                    max(kLineModel.dma?.dif ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.dma?.difMa ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
             }
+
             Indicator.Type.DMI -> {
-                minMaxArray[0] = min(kLineModel.dmi?.pdi ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[0] = min(kLineModel.dmi?.mdi ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[0] = min(kLineModel.dmi?.adx ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[0] = min(kLineModel.dmi?.adxr ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[1] = max(kLineModel.dmi?.pdi ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
-                minMaxArray[1] = max(kLineModel.dmi?.mdi ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
-                minMaxArray[1] = max(kLineModel.dmi?.adx ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
-                minMaxArray[1] = max(kLineModel.dmi?.adxr ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[0] =
+                    min(kLineModel.dmi?.pdi ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.dmi?.mdi ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.dmi?.adx ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.dmi?.adxr ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[1] =
+                    max(kLineModel.dmi?.pdi ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.dmi?.mdi ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.dmi?.adx ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.dmi?.adxr ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
 
             }
+
             Indicator.Type.KDJ -> {
                 minMaxArray[0] = min(kLineModel.kdj?.k ?: Double.POSITIVE_INFINITY, minMaxArray[0])
                 minMaxArray[0] = min(kLineModel.kdj?.d ?: Double.POSITIVE_INFINITY, minMaxArray[0])
@@ -357,42 +425,67 @@ internal class YAxisChart(
                 minMaxArray[1] = max(kLineModel.kdj?.d ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
                 minMaxArray[1] = max(kLineModel.kdj?.j ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
             }
+
             Indicator.Type.KD -> {
                 minMaxArray[0] = min(kLineModel.kdj?.k ?: Double.POSITIVE_INFINITY, minMaxArray[0])
                 minMaxArray[0] = min(kLineModel.kdj?.d ?: Double.POSITIVE_INFINITY, minMaxArray[0])
                 minMaxArray[1] = max(kLineModel.kdj?.k ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
                 minMaxArray[1] = max(kLineModel.kdj?.d ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
             }
+
             Indicator.Type.RSI -> {
-                minMaxArray[0] = min(kLineModel.rsi?.rsi1 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[0] = min(kLineModel.rsi?.rsi2 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[0] = min(kLineModel.rsi?.rsi3 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[1] = max(kLineModel.rsi?.rsi1 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
-                minMaxArray[1] = max(kLineModel.rsi?.rsi2 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
-                minMaxArray[1] = max(kLineModel.rsi?.rsi3 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[0] =
+                    min(kLineModel.rsi?.rsi1 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.rsi?.rsi2 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.rsi?.rsi3 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[1] =
+                    max(kLineModel.rsi?.rsi1 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.rsi?.rsi2 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.rsi?.rsi3 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
             }
+
             Indicator.Type.PSY -> {
-                minMaxArray[0] = min(kLineModel.psy?.psy ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[1] = max(kLineModel.psy?.psy ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[0] =
+                    min(kLineModel.psy?.psy ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[1] =
+                    max(kLineModel.psy?.psy ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
             }
+
             Indicator.Type.TRIX -> {
-                minMaxArray[0] = min(kLineModel.trix?.trix ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[0] = min(kLineModel.trix?.maTrix ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[1] = max(kLineModel.trix?.trix ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
-                minMaxArray[1] = max(kLineModel.trix?.maTrix ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[0] =
+                    min(kLineModel.trix?.trix ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.trix?.maTrix ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[1] =
+                    max(kLineModel.trix?.trix ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.trix?.maTrix ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
             }
+
             Indicator.Type.OBV -> {
-                minMaxArray[0] = min(kLineModel.obv?.obv ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[0] = min(kLineModel.obv?.maObv ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[1] = max(kLineModel.obv?.obv ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
-                minMaxArray[1] = max(kLineModel.obv?.maObv ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[0] =
+                    min(kLineModel.obv?.obv ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.obv?.maObv ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[1] =
+                    max(kLineModel.obv?.obv ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.obv?.maObv ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
             }
+
             Indicator.Type.VR -> {
                 minMaxArray[0] = min(kLineModel.vr?.vr ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[0] = min(kLineModel.vr?.maVr ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.vr?.maVr ?: Double.POSITIVE_INFINITY, minMaxArray[0])
                 minMaxArray[1] = max(kLineModel.vr?.vr ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
-                minMaxArray[1] = max(kLineModel.vr?.maVr ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.vr?.maVr ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
             }
+
             Indicator.Type.WR -> {
                 minMaxArray[0] = min(kLineModel.wr?.wr1 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
                 minMaxArray[0] = min(kLineModel.wr?.wr2 ?: Double.POSITIVE_INFINITY, minMaxArray[0])
@@ -401,24 +494,38 @@ internal class YAxisChart(
                 minMaxArray[1] = max(kLineModel.wr?.wr2 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
                 minMaxArray[1] = max(kLineModel.wr?.wr3 ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
             }
+
             Indicator.Type.MTM -> {
-                minMaxArray[0] = min(kLineModel.mtm?.mtm ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[0] = min(kLineModel.mtm?.mtmMa ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[1] = max(kLineModel.mtm?.mtm ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
-                minMaxArray[1] = max(kLineModel.mtm?.mtmMa ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[0] =
+                    min(kLineModel.mtm?.mtm ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.mtm?.mtmMa ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[1] =
+                    max(kLineModel.mtm?.mtm ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.mtm?.mtmMa ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
             }
+
             Indicator.Type.EMV -> {
-                minMaxArray[0] = min(kLineModel.emv?.emv ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[0] = min(kLineModel.emv?.maEmv ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[1] = max(kLineModel.emv?.emv ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
-                minMaxArray[1] = max(kLineModel.emv?.maEmv ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[0] =
+                    min(kLineModel.emv?.emv ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[0] =
+                    min(kLineModel.emv?.maEmv ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[1] =
+                    max(kLineModel.emv?.emv ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[1] =
+                    max(kLineModel.emv?.maEmv ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
             }
+
             Indicator.Type.SAR -> {
-                minMaxArray[0] = min(kLineModel.sar?.sar ?: Double.POSITIVE_INFINITY, minMaxArray[0])
-                minMaxArray[1] = max(kLineModel.sar?.sar ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
+                minMaxArray[0] =
+                    min(kLineModel.sar?.sar ?: Double.POSITIVE_INFINITY, minMaxArray[0])
+                minMaxArray[1] =
+                    max(kLineModel.sar?.sar ?: Double.NEGATIVE_INFINITY, minMaxArray[1])
                 minMaxArray[0] = min(kLineModel.lowPrice, minMaxArray[0])
                 minMaxArray[1] = max(kLineModel.highPrice, minMaxArray[1])
             }
+
             else -> {
                 calcYAxisMinMax?.calcYAxisMinMax(indicatorType, kLineModel, minMaxArray)
             }
