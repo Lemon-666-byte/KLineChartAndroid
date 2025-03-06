@@ -161,6 +161,7 @@ internal class TouchEvent(
         }
         when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
+                lastY = event.y
                 this.touchStartPoint.set(event.x, event.y)
                 this.touchMovePoint.set(event.rawX, event.rawY)
                 if (!checkEventAvailability()) {
@@ -226,6 +227,7 @@ internal class TouchEvent(
                             "向上滑动 ->" + DataProvider.axisScale + " deltaY->" + abs(deltaY.toDouble())
                         )
                     }
+                    this.chart.invalidate()
                 }
                 lastY = currentY
                 // 子控件相对于父布局若达到滚动条件，则让父布局拦截触摸事件
