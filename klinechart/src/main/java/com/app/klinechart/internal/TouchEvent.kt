@@ -191,6 +191,7 @@ internal class TouchEvent(
                 if (!checkEventAvailability()) {
                     return false
                 }
+
                 if (event.pointerCount >= 2) {
                     if (this.touchMode != TOUCH_CROSS) {
                         this.chart.parent?.requestDisallowInterceptTouchEvent(true)
@@ -212,22 +213,28 @@ internal class TouchEvent(
                 val currentY = event.y
                 val deltaY = currentY - lastY
                 if (abs(deltaY.toDouble()) > SWIPE_THRESHOLD) {
-                    if (deltaY > 0) {
-                        // 向下滑动，缩小 axisScale
-                        DataProvider.axisScale *= 1.01f
-                        Log.e(
-                            "TouchEvent",
-                            "向下滑动 ->" + DataProvider.axisScale + " deltaY->" + abs(deltaY.toDouble())
-                        )
-                    } else {
-                        // 向上滑动，增大 axisScale
-                        DataProvider.axisScale *= 0.99f
-                        Log.e(
-                            "TouchEvent",
-                            "向上滑动 ->" + DataProvider.axisScale + " deltaY->" + abs(deltaY.toDouble())
-                        )
+                    Log.e(
+                        "TouchEvent",
+                        "priceTouchRect:" +dataProvider.priceTouchRect+" contains:"+ dataProvider.priceTouchRect.contains(event.x, event.y)
+                    )
+                    if (dataProvider.priceTouchRect.contains(event.x, event.y)) {
+                        if (deltaY > 0) {
+                            // 向下滑动，缩小 axisScale
+                            DataProvider.axisScale *= 1.01f
+                            Log.e(
+                                "TouchEvent",
+                                "向下滑动 ->" + DataProvider.axisScale + " deltaY->" + abs(deltaY.toDouble())
+                            )
+                        } else {
+                            // 向上滑动，增大 axisScale
+                            DataProvider.axisScale *= 0.99f
+                            Log.e(
+                                "TouchEvent",
+                                "向上滑动 ->" + DataProvider.axisScale + " deltaY->" + abs(deltaY.toDouble())
+                            )
+                        }
+                        this.chart.invalidate()
                     }
-                    this.chart.invalidate()
                 }
                 lastY = currentY
                 // 子控件相对于父布局若达到滚动条件，则让父布局拦截触摸事件

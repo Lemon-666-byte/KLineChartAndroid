@@ -1,6 +1,7 @@
 package com.app.klinechart.internal
 
 import android.graphics.PointF
+import android.graphics.RectF
 import com.app.klinechart.KLineChartView
 import com.app.klinechart.model.KLineModel
 import kotlin.math.abs
@@ -23,6 +24,8 @@ internal class DataProvider(private val viewPortHandler: ViewPortHandler) {
 
         var axisScale = 100f
     }
+
+    val priceTouchRect = RectF()
 
 
     /**

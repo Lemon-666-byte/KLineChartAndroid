@@ -145,6 +145,12 @@ internal class YAxisChart(
                 canvas.drawText(label, initX, startY, this.paint)
             }
         }
+
+        dataProvider.priceTouchRect.left =
+            viewPortHandler.contentRight() - Utils.convertDpToPixel(30f)
+        dataProvider.priceTouchRect.top = this.viewPortHandler.contentTop()
+        dataProvider.priceTouchRect.right = this.viewPortHandler.contentRight()
+        dataProvider.priceTouchRect.bottom = this.offsetTop
     }
 
     /**
