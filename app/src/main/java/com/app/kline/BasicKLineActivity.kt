@@ -19,6 +19,11 @@ open class BasicKLineActivity : BasicActivity() {
         k_line_chart.candle.logoBitmap = bitmap
         k_line_chart.addData(dataList)
 
+        dataList.lastOrNull()?.let {
+            k_line_chart.postDelayed(
+                { k_line_chart.setZoomScale((it.closePrice / 10).toFloat()) }, 1000
+            )
+        }
 
     }
 

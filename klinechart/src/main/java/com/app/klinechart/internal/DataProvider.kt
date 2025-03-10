@@ -25,6 +25,11 @@ internal class DataProvider(private val viewPortHandler: ViewPortHandler) {
         var axisScale = 100f
     }
 
+    /**
+     * 初始化 缩放比例
+     */
+    var initZoomScale = 0f
+
     val priceTouchRect = RectF()
 
 

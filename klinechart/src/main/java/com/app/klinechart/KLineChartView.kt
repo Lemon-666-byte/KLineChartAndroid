@@ -3,7 +3,6 @@ package com.app.klinechart
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.TypedArray
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.PointF
@@ -1046,6 +1045,14 @@ class KLineChartView @JvmOverloads constructor(
      */
     fun loadComplete() {
         this.dataProvider.isLoading = false
+    }
+
+
+    /**
+     * 设置 滑动缩放 比例
+     */
+    fun setZoomScale(scale: Float) {
+        this.dataProvider.initZoomScale = scale
     }
 
     /**

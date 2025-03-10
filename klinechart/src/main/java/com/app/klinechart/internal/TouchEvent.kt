@@ -215,9 +215,14 @@ internal class TouchEvent(
                 if (abs(deltaY.toDouble()) > SWIPE_THRESHOLD) {
                     Log.e(
                         "TouchEvent",
-                        "priceTouchRect:" +dataProvider.priceTouchRect+" contains:"+ dataProvider.priceTouchRect.contains(event.x, event.y)
+                        "priceTouchRect:" + dataProvider.priceTouchRect + " contains:" + dataProvider.priceTouchRect.contains(
+                            event.x, event.y
+                        )
                     )
                     if (dataProvider.priceTouchRect.contains(event.x, event.y)) {
+                        if (DataProvider.axisScale <= 0) {
+                            DataProvider.axisScale = dataProvider.initZoomScale
+                        }
                         if (deltaY > 0) {
                             // 向下滑动，缩小 axisScale
                             DataProvider.axisScale *= 1.01f
