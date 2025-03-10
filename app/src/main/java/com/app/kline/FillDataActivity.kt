@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.os.Handler
 import com.app.kline.utils.DataUtils
 import com.app.klinechart.model.KLineModel
-import com.liihuu.kline.R
+import com.app.kline.R
 import kotlinx.android.synthetic.main.activity_fill_data.*
 import kotlinx.android.synthetic.main.kline_layout.*
 
 /**
- * @Author lihu hu_li888@foxmail.com
  * @Date 2019-09-24-22:47
  */
 class FillDataActivity : BasicKLineActivity() {

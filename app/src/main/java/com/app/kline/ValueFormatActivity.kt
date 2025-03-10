@@ -11,7 +11,6 @@ import com.app.kline.utils.formatDecimal
 import kotlinx.android.synthetic.main.kline_layout.k_line_chart
 
 /**
- * @Author lihu hu_li888@foxmail.com
  * @Date 2019-09-30-11:05
  */
 class ValueFormatActivity : BasicKLineActivity() {

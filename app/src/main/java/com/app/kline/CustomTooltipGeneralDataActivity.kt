@@ -7,11 +7,10 @@ import com.app.kline.utils.formatDate
 import com.app.kline.utils.formatDecimal
 import com.app.klinechart.component.Tooltip
 import com.app.klinechart.model.KLineModel
-import com.liihuu.kline.R
+import com.app.kline.R
 import kotlinx.android.synthetic.main.kline_layout.*
 
 /**
- * @Author lihu hu_li888@foxmail.com
  * @Date 2019-09-30-10:43
  */
 class CustomTooltipGeneralDataActivity : BasicKLineActivity() {

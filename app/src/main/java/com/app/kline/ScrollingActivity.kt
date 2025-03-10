@@ -1,9 +1,8 @@
 package com.app.kline
 
-import com.liihuu.kline.R
+import com.app.kline.R
 
 /**
- * @Author lihu hu_li888@foxmail.com
  * @Date 2019-09-23-20:14
  */
 class ScrollingActivity : BasicKLineActivity() {

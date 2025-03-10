@@ -4,11 +4,10 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import com.app.kline.utils.DataUtils
-import com.liihuu.kline.R
+import com.app.kline.R
 import kotlinx.android.synthetic.main.kline_layout.k_line_chart
 
 /**
- * @Author lihu hu_li888@foxmail.com
  * @Date 2019-09-23-23:23
  */
 open class BasicKLineActivity : BasicActivity() {

@@ -9,12 +9,11 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.klinechart.component.Indicator
-import com.liihuu.kline.R
+import com.app.kline.R
 import kotlinx.android.synthetic.main.activity_indicator_setting.*
 import kotlinx.android.synthetic.main.kline_layout.*
 
 /**
- * @Author lihu hu_li888@foxmail.com
  * @Date 2019-09-24-17:30
  */
 class IndicatorSettingActivity : BasicKLineActivity() {

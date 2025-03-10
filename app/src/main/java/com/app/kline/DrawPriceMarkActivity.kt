@@ -7,7 +7,6 @@ import com.app.klinechart.component.Candle
 import kotlinx.android.synthetic.main.kline_layout.*
 
 /**
- * @Author lihu hu_li888@foxmail.com
  * @Date 2019-09-24-21:26
  */
 class DrawPriceMarkActivity : BasicKLineActivity() {

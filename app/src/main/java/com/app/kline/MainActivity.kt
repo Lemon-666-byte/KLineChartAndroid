@@ -9,13 +9,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.liihuu.kline.R
+import com.app.kline.R
 import com.app.kline.model.UiInfoModel
 import com.app.kline.utils.DataUtils
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
- * @Author lihu hu_li888@foxmail.com
  * @Date 2019-09-23-20:14
  */
 class MainActivity : BasicActivity() {

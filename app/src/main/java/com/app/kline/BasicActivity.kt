@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.app_bar_layout.toolbar
 
 /**
- * @Author lihu hu_li888@foxmail.com
  * @Date 2019-09-23-20:36
  */
 abstract class BasicActivity : AppCompatActivity() {

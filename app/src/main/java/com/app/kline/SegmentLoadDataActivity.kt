@@ -8,7 +8,6 @@ import kotlinx.android.synthetic.main.kline_layout.*
 
 
 /**
- * @Author lihu hu_li888@foxmail.com
  * @Date 2019-09-24-18:51
  */
 class SegmentLoadDataActivity : BasicKLineActivity() {

@@ -9,14 +9,13 @@ import com.app.kline.model.MaModel
 import com.app.klinechart.KLineChartView
 import com.app.klinechart.component.Indicator
 import com.app.klinechart.model.KLineModel
-import com.liihuu.kline.R
+import com.app.kline.R
 import kotlinx.android.synthetic.main.activity_custom_indicator.*
 import kotlinx.android.synthetic.main.kline_layout.*
 import kotlin.math.max
 import kotlin.math.min
 
 /**
- * @Author lihu hu_li888@foxmail.com
  * @Date 2019-09-23-23:36
  */
 class CustomIndicatorActivity : BasicKLineActivity(),

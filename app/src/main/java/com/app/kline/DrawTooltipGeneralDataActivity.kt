@@ -8,12 +8,11 @@ import com.app.kline.utils.formatDate
 import com.app.kline.utils.formatDecimal
 import com.app.klinechart.component.Tooltip
 import com.app.klinechart.model.KLineModel
-import com.liihuu.kline.R
+import com.app.kline.R
 import kotlinx.android.synthetic.main.kline_layout.*
 import kotlin.math.max
 
 /**
- * @Author lihu hu_li888@foxmail.com
  * @Date 2019-09-28-15:30
  */
 class DrawTooltipGeneralDataActivity : BasicKLineActivity() {

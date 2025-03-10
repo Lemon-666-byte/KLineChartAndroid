@@ -5,11 +5,10 @@ import android.view.MenuItem
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import com.app.klinechart.component.Indicator
-import com.liihuu.kline.R
+import com.app.kline.R
 import kotlinx.android.synthetic.main.kline_layout.*
 
 /**
- * @Author lihu hu_li888@foxmail.com
  * @Date 2018/12/28-20:48
  */
 class StyleSettingActivity : BasicKLineActivity(){
